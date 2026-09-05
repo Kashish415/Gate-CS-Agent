@@ -1,7 +1,7 @@
 [project]
 name = "gate-cs-agent"
 version = "0.1.0"
-description = "Add your description here"
+description = "Agentic pipeline that generates, verifies and publishes daily GATE-CS practice questions to Telegram."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
