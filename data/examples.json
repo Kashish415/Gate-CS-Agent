@@ -1,0 +1,217 @@
+{
+  "Algorithms / Divide and Conquer": [
+    {
+      "subtopic": "Divide and Conquer",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Merge sort divide step partitions the array into halves regardless of element values.",
+      "trap": "Confusing merge sort's divide step with partitioning in quicksort, which depends on the pivot.",
+      "question": "In merge sort, the divide step splits the input array into two halves of sizes:",
+      "options": [
+        "n/2 and n/2 if n is even, otherwise n/2 and n/2 + 1",
+        "Two halves such that all elements in the left half are smaller than all elements in the right half",
+        "Equal halves based on a randomly chosen pivot",
+        "Halves such that the median of the array is at the boundary"
+      ],
+      "answer": "A",
+      "explanation": "Merge sort splits by index only, producing halves of sizes floor(n/2) and ceil(n/2). Partitioning by value happens in quicksort, not in merge sort's divide step."
+    },
+    {
+      "subtopic": "Divide and Conquer",
+      "type": "NAT",
+      "marks": 2,
+      "concept": "Solving a divide-and-conquer recurrence for a specific base case by direct substitution.",
+      "trap": "Substituting into the closed-form Theta(n log n) instead of unrolling the recurrence for the exact n given.",
+      "question": "Given T(n) = 2T(n/2) + n and T(1) = 0, what is the value of T(8)?",
+      "options": null,
+      "answer": 24.0,
+      "explanation": "T(1)=0, T(2)=2(0)+2=2, T(4)=2(2)+4=8, T(8)=2(8)+8=24. Direct substitution gives an exact value rather than relying on the asymptotic class alone."
+    },
+    {
+      "subtopic": "Divide and Conquer",
+      "type": "MSQ",
+      "marks": 2,
+      "concept": "Strassen's matrix multiplication beats the naive O(n^3) bound.",
+      "trap": "Selecting cubic-time algorithms or algorithms that do not actually use divide and conquer.",
+      "question": "Which of the following algorithms use a divide-and-conquer strategy? (Select all that apply.)",
+      "options": [
+        "Merge sort",
+        "Strassen's matrix multiplication",
+        "Selection sort",
+        "Closest pair of points in the plane"
+      ],
+      "answer": ["A", "B", "D"],
+      "explanation": "Merge sort, Strassen's, and the classic closest-pair algorithm all split the problem into subproblems, solve recursively, and combine. Selection sort is iterative and does not divide the input."
+    }
+  ],
+  "Operating Systems / Deadlocks": [
+    {
+      "subtopic": "Deadlocks",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "All four Coffman conditions must hold simultaneously for a deadlock to exist.",
+      "trap": "Choosing 'no preemption' alone or 'circular wait' alone; either is necessary but not sufficient.",
+      "question": "Which of the following is true about Coffman conditions for deadlock?",
+      "options": [
+        "Mutual exclusion alone is sufficient to cause a deadlock",
+        "Hold-and-wait alone is sufficient to cause a deadlock",
+        "All four conditions must hold simultaneously for a deadlock",
+        "Circular wait is sufficient even without mutual exclusion"
+      ],
+      "answer": "C",
+      "explanation": "A deadlock requires all four conditions: mutual exclusion, hold-and-wait, no preemption, and circular wait. Any one condition alone is necessary but not sufficient."
+    },
+    {
+      "subtopic": "Deadlocks",
+      "type": "MSQ",
+      "marks": 2,
+      "concept": "Deadlock prevention removes at least one of the four Coffman conditions.",
+      "trap": "Confusing prevention (breaking a condition a priori) with avoidance (Banker's algorithm).",
+      "question": "Which of the following are valid strategies for deadlock prevention? (Select all that apply.)",
+      "options": [
+        "Requiring all resources to be requested at once, removing hold-and-wait",
+        "Making all resources preemptable, removing no-preemption",
+        "Imposing a total ordering on resource acquisition, removing circular wait",
+        "Using the Banker's algorithm to test safe states"
+      ],
+      "answer": ["A", "B", "C"],
+      "explanation": "Options A, B, and C each remove one Coffman condition, which is the definition of prevention. The Banker's algorithm is avoidance, not prevention."
+    },
+    {
+      "subtopic": "Deadlocks",
+      "type": "NAT",
+      "marks": 2,
+      "concept": "Resource allocation graphs encode allocation and request edges between processes and resources.",
+      "trap": "Counting instances of resources versus counting request edges when reasoning about cycles.",
+      "question": "A system has 3 processes P1, P2, P3 and 2 identical instances of resource R. Each process may request at most 1 instance at a time. What is the maximum number of processes that can hold R simultaneously without a cycle being possible?",
+      "options": null,
+      "answer": 2.0,
+      "explanation": "With 2 instances of R, at most 2 processes can hold the resource at once. A cycle in a single-resource instance graph requires at least as many request edges as instances plus one, which is impossible here."
+    }
+  ],
+  "DBMS / Normalization": [
+    {
+      "subtopic": "Normalization",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Third Normal Form (3NF) allows transitive dependencies as long as the determinant is a candidate key or the dependent is a prime attribute.",
+      "trap": "Confusing 3NF with BCNF, which forbids any non-trivial dependency where the determinant is not a superkey.",
+      "question": "A relation R is in 3NF but not in BCNF. The most likely reason is:",
+      "options": [
+        "R has a non-prime attribute that depends on a non-superkey",
+        "R has a functional dependency X -> A where X is not a superkey and A is not a prime attribute",
+        "R has a multivalued dependency",
+        "R is not in 1NF"
+      ],
+      "answer": "B",
+      "explanation": "3NF permits a non-superkey determinant when the dependent attribute is prime. BCNF forbids this entirely. Multivalued dependencies relate to 4NF, not the 3NF/BCNF distinction."
+    },
+    {
+      "subtopic": "Normalization",
+      "type": "MSQ",
+      "marks": 2,
+      "concept": "Lossless-join decomposition preserves the ability to reconstruct the original relation via natural join.",
+      "trap": "Conflating lossless join with dependency preservation; a decomposition can be one without the other.",
+      "question": "Which of the following are guaranteed by a lossless-join decomposition of R into R1 and R2? (Select all that apply.)",
+      "options": [
+        "R1 join R2 over their common attributes equals R",
+        "Every functional dependency in R is preserved in either R1 or R2",
+        "The common attributes of R1 and R2 form a superkey of at least one of them",
+        "R1 and R2 are each in 3NF"
+      ],
+      "answer": ["A", "C"],
+      "explanation": "Lossless join is exactly the property that the natural join reproduces R, and the standard sufficient condition is that the shared attributes form a superkey of one of the parts. Dependency preservation (B) and normalization to 3NF (D) are independent properties."
+    },
+    {
+      "subtopic": "Normalization",
+      "type": "NAT",
+      "marks": 2,
+      "concept": "Minimum number of tables needed to represent an n-attribute relation in BCNF without loss of information.",
+      "trap": "Assuming decomposition always collapses to 2 tables; the count depends on the dependency set.",
+      "question": "A relation has attributes A, B, C with functional dependencies A -> B and A -> C. What is the minimum number of relations required to put this into BCNF?",
+      "options": null,
+      "answer": 1.0,
+      "explanation": "A is a key and the only determinant. Since every FD has a superkey on the left, the original relation is already in BCNF, requiring no decomposition. Answer is 1."
+    }
+  ],
+  "Computer Networks / IP Addressing and Subnetting": [
+    {
+      "subtopic": "IP Addressing and Subnetting",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "A /26 subnet mask leaves 6 host bits, giving 2^6 - 2 = 62 usable host addresses.",
+      "trap": "Forgetting to subtract 2 for network and broadcast addresses, or miscounting bits.",
+      "question": "How many usable host addresses does a /26 IPv4 subnet provide?",
+      "options": ["62", "64", "126", "128"],
+      "answer": "A",
+      "explanation": "A /26 leaves 32 - 26 = 6 host bits. Total addresses are 2^6 = 64; subtract 2 for the network and broadcast addresses to get 62 usable hosts."
+    },
+    {
+      "subtopic": "IP Addressing and Subnetting",
+      "type": "NAT",
+      "marks": 2,
+      "concept": "CIDR block aggregation: number of addresses equals 2^(32 - prefix length).",
+      "trap": "Using the wrong exponent or forgetting that the block size is 2^(32 - prefix).",
+      "question": "An organization is allocated the CIDR block 192.168.10.0/22. How many total IPv4 addresses does this block contain?",
+      "options": null,
+      "answer": 1024.0,
+      "explanation": "A /22 leaves 32 - 22 = 10 host bits, giving 2^10 = 1024 total addresses. (Usable hosts would be 1022, but the question asks for total addresses.)"
+    },
+    {
+      "subtopic": "IP Addressing and Subnetting",
+      "type": "MSQ",
+      "marks": 2,
+      "concept": "Classless addressing and CIDR replaced the rigid classful scheme so that prefix lengths can be any value.",
+      "trap": "Selecting classful rules (Class A/B/C boundaries) which are no longer the basis of subnetting.",
+      "question": "Which of the following statements about IPv4 subnetting are TRUE? (Select all that apply.)",
+      "options": [
+        "A /30 subnet has 2 usable host addresses",
+        "Subnet zero (all-zeros) and all-ones subnets are usable under CIDR",
+        "The default mask for a Class B network is /16",
+        "A subnet with prefix /31 has 0 usable host addresses for point-to-point links under RFC 3021"
+      ],
+      "answer": ["A", "B", "C", "D"],
+      "explanation": "All four are true. /30 has 2 usable hosts, CIDR permits use of the zero and all-ones subnets, Class B default is /16, and /31 has 0 usable hosts but is permitted for point-to-point links under RFC 3021."
+    }
+  ],
+  "Data Structures / Hashing": [
+    {
+      "subtopic": "Hashing",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Under simple uniform hashing, the expected number of probes for successful search in a chained hash table is 1 + alpha/2, where alpha is the load factor.",
+      "trap": "Confusing successful search (1 + alpha/2) with unsuccessful search (1 + alpha).",
+      "question": "For a chained hash table with load factor alpha, the expected number of probes for a successful search under simple uniform hashing is:",
+      "options": ["1 + alpha", "1 + alpha/2", "alpha", "log(1 + alpha)"],
+      "answer": "B",
+      "explanation": "For a successful search, on average we search half the chain, giving 1 + alpha/2. Unsuccessful search traverses the whole chain on average, giving 1 + alpha."
+    },
+    {
+      "subtopic": "Hashing",
+      "type": "MSQ",
+      "marks": 2,
+      "concept": "Open addressing requires a probe sequence and degrades as the load factor approaches 1.",
+      "trap": "Including chaining as a form of open addressing, or assuming deletion is trivial in open addressing.",
+      "question": "Which of the following are TRUE about open addressing in hash tables? (Select all that apply.)",
+      "options": [
+        "All elements are stored within the table itself; no external lists are used",
+        "The load factor must be strictly less than 1 for insertions to be guaranteed a free slot",
+        "Standard deletion requires a tombstone marker to preserve probe sequences",
+        "Linear probing is the only collision resolution strategy under open addressing"
+      ],
+      "answer": ["A", "B", "C"],
+      "explanation": "A, B, and C are true. D is false: linear, quadratic, and double hashing are all valid open addressing strategies."
+    },
+    {
+      "subtopic": "Hashing",
+      "type": "NAT",
+      "marks": 2,
+      "concept": "Universal hashing guarantees that for any key, the probability of collision with another specific key is at most 1/m, where m is the table size.",
+      "trap": "Misreading the probability bound or mixing it with the probability of a collision under a fixed hash function.",
+      "question": "A hash table uses a universal hash family with m = 1000 slots. What is the maximum probability that two distinct keys collide under a randomly chosen hash function from the family? Express as a decimal to 3 decimal places.",
+      "options": null,
+      "answer": 0.001,
+      "explanation": "By definition of universal hashing, for any pair of distinct keys x and y, Pr[h(x) = h(y)] <= 1/m = 1/1000 = 0.001."
+    }
+  ]
+}

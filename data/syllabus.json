@@ -1,0 +1,52 @@
+{
+  "Operating Systems": [
+    "Process Synchronization",
+    "CPU Scheduling",
+    "Deadlocks",
+    "Virtual Memory",
+    "File Systems"
+  ],
+  "Algorithms": [
+    "Divide and Conquer",
+    "Greedy",
+    "Dynamic Programming",
+    "Graph Algorithms",
+    "NP-Completeness"
+  ],
+  "DBMS": [
+    "Relational Algebra",
+    "Normalization",
+    "Transactions and Concurrency",
+    "Indexing and Hashing"
+  ],
+  "Computer Networks": [
+    "IP Addressing and Subnetting",
+    "TCP and UDP",
+    "Routing Protocols",
+    "Application Layer"
+  ],
+  "Data Structures": [
+    "Trees and BST",
+    "Hashing",
+    "Heaps",
+    "Linked Lists"
+  ],
+  "Theory of Computation": [
+    "Finite Automata",
+    "Pumping Lemma",
+    "Decidability",
+    "Complexity Classes"
+  ],
+  "Discrete Mathematics": [
+    "Sets and Relations",
+    "Graph Theory",
+    "Combinatorics",
+    "Propositional Logic"
+  ],
+  "Computer Organization": [
+    "Pipelining",
+    "Cache Memory",
+    "Addressing Modes",
+    "I/O and Interrupts"
+  ]
+}
