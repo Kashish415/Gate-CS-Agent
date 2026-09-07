@@ -30,6 +30,22 @@ class ValidationOutcome(BaseModel):
     reason: FailureReason | None = None
     detail: str | None = None
 
+class DailyLogRow(BaseModel):
+    date: date
+    slot_index: int
+    subject: str
+    subtopic: str
+    question_type: QuestionType
+    marks: Literal[1, 2]
+    generator_answer: str | list[str] | float | None = None
+    verifier_answer: str | list[str] | float | None = None
+    agreement: bool = False
+    confidence: int | None = None
+    retry_count: int
+    latency_ms: int
+    published: bool
+    failure_reason: FailureReason | None = None
+
 class VerifiedQuestion(GeneratedQuestion):
     verifier: VerifierResult
     published: bool
