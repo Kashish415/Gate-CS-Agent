@@ -1,9 +1,7 @@
 from datetime import date
 from typing import Literal
 from pydantic import BaseModel, Field
-from __future__ import annotations
-from src.domain.enums import QuestionType
-from src.domain.enums import FailureReason
+from src.domain.enums import FailureReason, QuestionType
 
 class SlotSpec(BaseModel):
     slot_index: int
@@ -12,12 +10,14 @@ class SlotSpec(BaseModel):
     question_type: QuestionType
     marks: Literal[1, 2]
 
-class GeneratedQuestion(BaseModel):
-    slot: SlotSpec
+class GeneratedQuestionPayload(BaseModel):
     question: str
     options: list[str] | None = None
     answer: str | list[str] | float
     explanation: str
+
+class GeneratedQuestion(GeneratedQuestionPayload):
+    slot: SlotSpec
 
 class VerifierResult(BaseModel):
     answer: str | list[str] | float
@@ -27,17 +27,10 @@ class VerifierResult(BaseModel):
 
 class ValidationOutcome(BaseModel):
     passed: bool
-    reason: "FailureReason | None" = None
+    reason: FailureReason | None = None
     detail: str | None = None
 
-class VerifiedQuestion(BaseModel):
-    slot: SlotSpec
-    question: str
-    options: list[str] | None = None
-    answer: str | list[str] | float
-    explanation: str
+class VerifiedQuestion(GeneratedQuestion):
     verifier: VerifierResult
     published: bool
     cached_on: date
-
-ValidationOutcome.model_rebuild()

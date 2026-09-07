@@ -1,10 +1,10 @@
-from __future__ import annotations
-
 import os
 import random
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
+from typing import Callable
+
 from dotenv import load_dotenv
 from src.domain.enums import QuestionType
 from src.domain.models import SlotSpec
@@ -46,14 +46,17 @@ class Settings:
     telegram_publish_retries: int
 
 
-def _env_int(name: str, default: int) -> int:
+def _env_cast[T](name: str, default: T, cast: Callable[[str], T]) -> T:
     raw = os.getenv(name)
-    return int(raw) if raw else default
+    return cast(raw) if raw else default
+
+
+def _env_int(name: str, default: int) -> int:
+    return _env_cast(name, default, int)
 
 
 def _env_float(name: str, default: float) -> float:
-    raw = os.getenv(name)
-    return float(raw) if raw else default
+    return _env_cast(name, default, float)
 
 
 def load_settings() -> Settings:
@@ -110,6 +113,7 @@ def pick_daily_slots(
     rng.shuffle(subject_keys)
 
     slots: list[SlotSpec] = []
+
     for slot_index, ((qtype, marks), subject) in enumerate(
         zip(SLOT_TEMPLATE, subject_keys)
     ):
