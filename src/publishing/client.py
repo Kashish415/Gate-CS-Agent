@@ -1,6 +1,6 @@
 import asyncio
 from collections.abc import Awaitable, Callable
-from typing import Protocol
+from typing import Literal, Protocol
 
 from telegram import Bot
 from telegram.error import TelegramError
@@ -12,8 +12,10 @@ class TelegramClient(Protocol):
 		chat_id: str,
 		question: str,
 		options: tuple[str, ...],
-		correct_option_id: int,
+		correct_option_id: int | None,
 		explanation: str | None = None,
+		poll_type: Literal["quiz", "regular"] = "quiz",
+		allow_multiple_answers: bool = False,
 	) -> bool: ...
 
 	async def send_text(self, chat_id: str, text: str) -> bool: ...
@@ -29,18 +31,21 @@ class BotAPIClient:
 		chat_id: str,
 		question: str,
 		options: tuple[str, ...],
-		correct_option_id: int,
+		correct_option_id: int | None,
 		explanation: str | None = None,
+		poll_type: Literal["quiz", "regular"] = "quiz",
+		allow_multiple_answers: bool = False,
 	) -> bool:
 		async def send(bot: Bot) -> None:
 			await bot.send_poll(
 				chat_id=chat_id,
 				question=question,
 				options=list(options),
-				type="quiz",
+				type=poll_type,
 				correct_option_id=correct_option_id,
 				explanation=explanation[:200] if explanation else None,
 				is_anonymous=True,
+				allows_multiple_answers=allow_multiple_answers,
 			)
 
 		return await self._run(send)

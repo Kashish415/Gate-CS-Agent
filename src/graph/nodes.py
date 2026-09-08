@@ -20,10 +20,8 @@ from src.domain.models import (
 from src.graph.state import PipelineState
 from src.llm.prompts import build_generator_chain, build_verifier_chain
 from src.publishing.client import TelegramClient
-from src.publishing.formatter import format_mcq, format_msq_or_nat
+from src.publishing.formatter import format_mcq, format_msq, format_msq_or_nat
 from src.validators.base import QuestionValidator
-
-
 class ExamplesLookup(Protocol):
 	def __call__(self, subject: str, subtopic: str) -> list[dict[str, object]]: ...
 
@@ -76,6 +74,7 @@ def _log_row(
 def generate_node(
 	generator_model: BaseChatModel,
 	examples_lookup: ExamplesLookup,
+	request_interval_seconds: int,
 ) -> Callable[[PipelineState], Awaitable[PipelineState]]:
 	async def node(state: PipelineState) -> PipelineState:
 		slots = [
@@ -83,24 +82,29 @@ def generate_node(
 			for slot in _unresolved_slots(state)
 			if state["generated"].get(slot.slot_index) is None
 		]
+		semaphore = asyncio.Semaphore(1)
 
 		async def generate(slot: SlotSpec) -> tuple[int, GeneratedQuestion | None]:
-			chain = build_generator_chain(
-				generator_model,
-				slot,
-				examples_lookup(slot.subject, slot.subtopic),
-			)
-			try:
-				payload = await chain.ainvoke({})
-			except Exception:
-				return slot.slot_index, None
-			if not isinstance(payload, GeneratedQuestionPayload):
-				return slot.slot_index, None
-			return slot.slot_index, GeneratedQuestion(slot=slot, **payload.model_dump())
+			async with semaphore:
+				chain = build_generator_chain(
+					generator_model,
+					slot,
+					examples_lookup(slot.subject, slot.subtopic),
+				)
+				try:
+					payload = await chain.ainvoke({})
+				except Exception as error:
+					print(f"[Generator Error] Slot {slot.slot_index}: {error}")
+					return slot.slot_index, None
+				await asyncio.sleep(request_interval_seconds)
+				if not isinstance(payload, GeneratedQuestionPayload):
+					return slot.slot_index, None
+				return slot.slot_index, GeneratedQuestion(slot=slot, **payload.model_dump())
 
 		results = await asyncio.gather(*(generate(slot) for slot in slots))
 		for slot_index, question in results:
-			state["generated"][slot_index] = question
+			if question is not None:
+				state["generated"][slot_index] = question
 		return state
 
 	return node
@@ -132,21 +136,26 @@ def verify_node(
 			and state["verifier"].get(slot.slot_index) is None
 		]
 
+		verifier_semaphore = asyncio.Semaphore(2)
+
 		async def verify(slot: SlotSpec) -> tuple[int, VerifierResult | None]:
-			question = state["generated"][slot.slot_index]
-			if question is None:
-				return slot.slot_index, None
-			chain = build_verifier_chain(
-				verifier_model,
-				slot,
-				question.question,
-				question.options,
-			)
-			try:
-				result = await chain.ainvoke({})
-			except Exception:
-				return slot.slot_index, None
-			return slot.slot_index, result if isinstance(result, VerifierResult) else None
+			async with verifier_semaphore:
+				question = state["generated"][slot.slot_index]
+				if question is None:
+					return slot.slot_index, None
+				chain = build_verifier_chain(
+					verifier_model,
+					slot,
+					question.question,
+					question.options,
+				)
+				try:
+					result = await chain.ainvoke({})
+				except Exception as e:
+					print(f"[Verifier Error] Slot {slot.slot_index} failed: {e}")
+					return slot.slot_index, None
+				await asyncio.sleep(1.5)
+				return slot.slot_index, result if isinstance(result, VerifierResult) else None
 
 		results = await asyncio.gather(*(verify(slot) for slot in slots))
 		for slot_index, result in results:
@@ -257,11 +266,27 @@ def publish_node(
 					correct_id,
 					explanation,
 				)
+			elif slot.question_type is QuestionType.MSQ:
+				question_text, options = format_msq(question)
+				published = await telegram.send_poll(
+					chat_id,
+					question_text,
+					options,
+					None,
+					poll_type="regular",
+					allow_multiple_answers=True,
+				)
+				if published:
+					published = await telegram.send_text(
+						chat_id,
+						format_msq_or_nat(question)[1],
+					)
 			else:
 				messages = format_msq_or_nat(question)
-				published = all(
-					[await telegram.send_text(chat_id, message) for message in messages]
-				)
+				results = [
+					await telegram.send_text(chat_id, message) for message in messages
+				]
+				published = all(results)
 			state["publish_results"][slot_index] = published
 			if published:
 				cache.save(question)

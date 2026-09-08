@@ -20,6 +20,12 @@ def format_mcq(q: VerifiedQuestion) -> tuple[str, tuple[str, ...], int, str]:
 	return q.question, tuple(q.options), correct_option_id, q.explanation[:200]
 
 
+def format_msq(q: VerifiedQuestion) -> tuple[str, tuple[str, ...]]:
+	if q.slot.question_type is not QuestionType.MSQ or q.options is None:
+		raise ValueError("format_msq requires an MSQ with options")
+	return q.question, tuple(q.options)
+
+
 def format_msq_or_nat(q: VerifiedQuestion) -> list[str]:
 	if q.slot.question_type is QuestionType.MSQ:
 		if q.options is None or not isinstance(q.answer, list):
@@ -35,4 +41,7 @@ def format_msq_or_nat(q: VerifiedQuestion) -> list[str]:
 		answer = str(q.answer)
 	else:
 		raise ValueError("format_msq_or_nat requires an MSQ or NAT")
-	return [_escape_markdown_v2(question), f"||{_escape_markdown_v2(answer)}||"]
+	return [
+		_escape_markdown_v2(question),
+		f"Click to view the answer:\n||{_escape_markdown_v2(answer)}||",
+	]

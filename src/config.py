@@ -13,8 +13,6 @@ load_dotenv()
 
 SLOT_TEMPLATE: tuple[tuple[QuestionType, int], ...] = (
     (QuestionType.MCQ, 1),
-    (QuestionType.MCQ, 1),
-    (QuestionType.MCQ, 2),
     (QuestionType.MSQ, 2),
     (QuestionType.NAT, 2),
 )
@@ -29,6 +27,8 @@ NAT_ABSOLUTE_TOLERANCE = 0.01
 NAT_RELATIVE_TOLERANCE = 0.01
 MIN_VERIFIER_CONFIDENCE = 3
 TELEGRAM_PUBLISH_RETRIES = 3
+GENERATOR_MAX_TOKENS = 300
+GROQ_REQUEST_INTERVAL_SECONDS = 20
 
 
 @dataclass(frozen=True)
@@ -45,6 +45,8 @@ class Settings:
     nat_relative_tolerance: float
     min_verifier_confidence: int
     telegram_publish_retries: int
+    generator_max_tokens: int
+    groq_request_interval_seconds: int
 
 
 def _env_cast[T](name: str, default: T, cast: Callable[[str], T]) -> T:
@@ -97,6 +99,10 @@ def load_settings() -> Settings:
         min_verifier_confidence=_env_int("MIN_VERIFIER_CONFIDENCE", MIN_VERIFIER_CONFIDENCE),
         telegram_publish_retries=_env_int(
             "TELEGRAM_PUBLISH_RETRIES", TELEGRAM_PUBLISH_RETRIES
+        ),
+        generator_max_tokens=_env_int("GENERATOR_MAX_TOKENS", GENERATOR_MAX_TOKENS),
+        groq_request_interval_seconds=_env_int(
+            "GROQ_REQUEST_INTERVAL_SECONDS", GROQ_REQUEST_INTERVAL_SECONDS
         ),
     )
 

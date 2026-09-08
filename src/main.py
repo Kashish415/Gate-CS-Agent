@@ -46,12 +46,15 @@ async def run() -> None:
 	slots = pick_daily_slots(today, syllabus, recent_usage)
 
 	generator_model = ChatGroq(
-		model="llama-3.3-70b-versatile",
+		model="qwen/qwen3.8-27b",
 		api_key=settings.groq_api_key,
+		max_tokens=settings.generator_max_tokens,
+		max_retries=0,
 	)
 	verifier_model = ChatGoogleGenerativeAI(
 		model="gemini-2.5-flash",
 		api_key=settings.google_api_key,
+		max_retries=2,
 	)
 	telegram = BotAPIClient(
 		token=settings.telegram_bot_token,
@@ -74,6 +77,7 @@ async def run() -> None:
 		chat_id=settings.telegram_channel_id,
 		max_retries=settings.max_retries_per_slot,
 		min_confidence=settings.min_verifier_confidence,
+		groq_request_interval_seconds=settings.groq_request_interval_seconds,
 	)
 	initial_state: PipelineState = {
 		"slots": slots,
