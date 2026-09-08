@@ -39,6 +39,7 @@ class Settings:
     langsmith_api_key: str
     langsmith_project: str
     langsmith_tracing: bool
+    google_api_key: str
     max_retries_per_slot: int
     nat_absolute_tolerance: float
     nat_relative_tolerance: float
@@ -64,6 +65,7 @@ def load_settings() -> Settings:
     telegram_bot_token = os.getenv("TELEGRAM_BOT_TOKEN", "")
     telegram_channel_id = os.getenv("TELEGRAM_CHANNEL_ID", "")
     langsmith_api_key = os.getenv("LANGSMITH_API_KEY", "")
+    google_api_key = os.getenv("GOOGLE_API_KEY", "")
     langsmith_project = os.getenv("LANGSMITH_PROJECT", "gate-cs-agent")
     langsmith_tracing = os.getenv("LANGSMITH_TRACING", "true").lower() == "true"
 
@@ -74,6 +76,7 @@ def load_settings() -> Settings:
             ("TELEGRAM_BOT_TOKEN", telegram_bot_token),
             ("TELEGRAM_CHANNEL_ID", telegram_channel_id),
             ("LANGSMITH_API_KEY", langsmith_api_key),
+            ("GOOGLE_API_KEY", google_api_key),
         )
         if not value
     ]
@@ -87,6 +90,7 @@ def load_settings() -> Settings:
         langsmith_api_key=langsmith_api_key,
         langsmith_project=langsmith_project,
         langsmith_tracing=langsmith_tracing,
+        google_api_key=google_api_key,
         max_retries_per_slot=_env_int("MAX_RETRIES_PER_SLOT", MAX_RETRIES_PER_SLOT),
         nat_absolute_tolerance=_env_float("NAT_ABSOLUTE_TOLERANCE", NAT_ABSOLUTE_TOLERANCE),
         nat_relative_tolerance=_env_float("NAT_RELATIVE_TOLERANCE", NAT_RELATIVE_TOLERANCE),
