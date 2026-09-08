@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS daily_log (
 	subtopic TEXT NOT NULL,
 	type TEXT NOT NULL,
 	marks INTEGER NOT NULL,
+	question_text TEXT,
 	generator_answer TEXT,
 	verifier_answer TEXT,
 	agreement INTEGER NOT NULL,
@@ -42,6 +43,11 @@ def _connect(db_path: Path) -> Iterator[sqlite3.Connection]:
 def init_db(db_path: Path = DB_PATH) -> None:
 	with _connect(db_path) as connection:
 		connection.execute(_CREATE_TABLE)
+		columns = {
+			row[1] for row in connection.execute("PRAGMA table_info(daily_log)")
+		}
+		if "question_text" not in columns:
+			connection.execute("ALTER TABLE daily_log ADD COLUMN question_text TEXT")
 
 
 def log_slot(row: DailyLogRow, db_path: Path = DB_PATH) -> None:
@@ -52,6 +58,7 @@ def log_slot(row: DailyLogRow, db_path: Path = DB_PATH) -> None:
 		row.subtopic,
 		row.question_type.value,
 		row.marks,
+		row.question_text,
 		json.dumps(row.generator_answer),
 		json.dumps(row.verifier_answer),
 		int(row.agreement),
@@ -65,10 +72,10 @@ def log_slot(row: DailyLogRow, db_path: Path = DB_PATH) -> None:
 		connection.execute(
 			"""
 			INSERT OR IGNORE INTO daily_log (
-				date, slot_index, subject, subtopic, type, marks,
+				date, slot_index, subject, subtopic, type, marks, question_text,
 				generator_answer, verifier_answer, agreement, confidence,
 				retry_count, latency_ms, published, failure_reason
-			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 			""",
 			values,
 		)
@@ -100,3 +107,11 @@ def recent_subtopic_usage(
 			(start.isoformat(), end.isoformat()),
 		).fetchall()
 	return {(subject, subtopic) for subject, subtopic in rows}
+
+
+def published_question_texts(db_path: Path = DB_PATH) -> set[str]:
+	with _connect(db_path) as connection:
+		rows = connection.execute(
+			"SELECT question_text FROM daily_log WHERE published = 1 AND question_text IS NOT NULL"
+		).fetchall()
+	return {question_text for (question_text,) in rows}

@@ -37,6 +37,7 @@ class DailyLogRow(BaseModel):
     subtopic: str
     question_type: QuestionType
     marks: Literal[1, 2]
+    question_text: str | None = None
     generator_answer: str | list[str] | float | None = None
     verifier_answer: str | list[str] | float | None = None
     agreement: bool = False

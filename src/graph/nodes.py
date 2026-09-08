@@ -29,11 +29,15 @@ class ExamplesLookup(Protocol):
 class CacheStore(Protocol):
 	def get(self, slot: SlotSpec) -> VerifiedQuestion | None: ...
 
+	def get_excluded_questions(self) -> set[str]: ...
+
 	def save(self, question: VerifiedQuestion) -> None: ...
 
 
 class Database(Protocol):
 	def log_slot(self, row: DailyLogRow) -> None: ...
+
+	def published_question_texts(self) -> set[str]: ...
 
 
 def _unresolved_slots(state: PipelineState) -> Sequence[SlotSpec]:
@@ -60,6 +64,7 @@ def _log_row(
 		subtopic=slot.subtopic,
 		question_type=slot.question_type,
 		marks=slot.marks,
+		question_text=generated.question if generated else None,
 		generator_answer=generated.answer if generated else None,
 		verifier_answer=verifier.answer if verifier else None,
 		agreement=verifier is not None and failure_reason is None,
@@ -224,7 +229,7 @@ def fallback_node(
 			if state["retries"].get(slot_index, 0) < max_retries:
 				continue
 			started = perf_counter()
-			cached = cache.get(slot)
+			cached = cache.get(slot, db.published_question_texts())
 			if cached is None:
 				db.log_slot(
 					_log_row(

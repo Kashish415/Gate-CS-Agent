@@ -9,11 +9,17 @@ class VerifiedCache:
     def __init__(self, path: Path) -> None:
         self._path = path
 
-    def get(self, slot: SlotSpec) -> VerifiedQuestion | None:
+    def get(
+        self,
+        slot: SlotSpec,
+        excluded_questions: set[str] | None = None,
+    ) -> VerifiedQuestion | None:
+        excluded = excluded_questions or set()
         for question in reversed(self._load()):
             if (
                 question.slot.question_type is slot.question_type
                 and question.slot.marks == slot.marks
+                and question.question not in excluded
             ):
                 return question
         return None
