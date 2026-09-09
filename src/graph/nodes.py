@@ -79,7 +79,6 @@ def _log_row(
 def generate_node(
 	generator_model: BaseChatModel,
 	examples_lookup: ExamplesLookup,
-	request_interval_seconds: int,
 ) -> Callable[[PipelineState], Awaitable[PipelineState]]:
 	async def node(state: PipelineState) -> PipelineState:
 		slots = [
@@ -87,7 +86,7 @@ def generate_node(
 			for slot in _unresolved_slots(state)
 			if state["generated"].get(slot.slot_index) is None
 		]
-		semaphore = asyncio.Semaphore(1)
+		semaphore = asyncio.Semaphore(2)
 
 		async def generate(slot: SlotSpec) -> tuple[int, GeneratedQuestion | None]:
 			async with semaphore:
@@ -101,7 +100,6 @@ def generate_node(
 				except Exception as error:
 					print(f"[Generator Error] Slot {slot.slot_index}: {error}")
 					return slot.slot_index, None
-				await asyncio.sleep(request_interval_seconds)
 				if not isinstance(payload, GeneratedQuestionPayload):
 					return slot.slot_index, None
 				return slot.slot_index, GeneratedQuestion(slot=slot, **payload.model_dump())
@@ -159,7 +157,6 @@ def verify_node(
 				except Exception as e:
 					print(f"[Verifier Error] Slot {slot.slot_index} failed: {e}")
 					return slot.slot_index, None
-				await asyncio.sleep(1.5)
 				return slot.slot_index, result if isinstance(result, VerifierResult) else None
 
 		results = await asyncio.gather(*(verify(slot) for slot in slots))

@@ -27,8 +27,8 @@ NAT_ABSOLUTE_TOLERANCE = 0.01
 NAT_RELATIVE_TOLERANCE = 0.01
 MIN_VERIFIER_CONFIDENCE = 3
 TELEGRAM_PUBLISH_RETRIES = 3
-GENERATOR_MAX_TOKENS = 300
-GROQ_REQUEST_INTERVAL_SECONDS = 20
+GENERATOR_MAX_TOKENS = 700
+VERIFIER_MAX_TOKENS = 400
 
 
 @dataclass(frozen=True)
@@ -39,14 +39,13 @@ class Settings:
     langsmith_api_key: str
     langsmith_project: str
     langsmith_tracing: bool
-    google_api_key: str
     max_retries_per_slot: int
     nat_absolute_tolerance: float
     nat_relative_tolerance: float
     min_verifier_confidence: int
     telegram_publish_retries: int
     generator_max_tokens: int
-    groq_request_interval_seconds: int
+    verifier_max_tokens: int
 
 
 def _env_cast[T](name: str, default: T, cast: Callable[[str], T]) -> T:
@@ -67,7 +66,6 @@ def load_settings() -> Settings:
     telegram_bot_token = os.getenv("TELEGRAM_BOT_TOKEN", "")
     telegram_channel_id = os.getenv("TELEGRAM_CHANNEL_ID", "")
     langsmith_api_key = os.getenv("LANGSMITH_API_KEY", "")
-    google_api_key = os.getenv("GOOGLE_API_KEY", "")
     langsmith_project = os.getenv("LANGSMITH_PROJECT", "gate-cs-agent")
     langsmith_tracing = os.getenv("LANGSMITH_TRACING", "true").lower() == "true"
 
@@ -78,7 +76,6 @@ def load_settings() -> Settings:
             ("TELEGRAM_BOT_TOKEN", telegram_bot_token),
             ("TELEGRAM_CHANNEL_ID", telegram_channel_id),
             ("LANGSMITH_API_KEY", langsmith_api_key),
-            ("GOOGLE_API_KEY", google_api_key),
         )
         if not value
     ]
@@ -92,7 +89,6 @@ def load_settings() -> Settings:
         langsmith_api_key=langsmith_api_key,
         langsmith_project=langsmith_project,
         langsmith_tracing=langsmith_tracing,
-        google_api_key=google_api_key,
         max_retries_per_slot=_env_int("MAX_RETRIES_PER_SLOT", MAX_RETRIES_PER_SLOT),
         nat_absolute_tolerance=_env_float("NAT_ABSOLUTE_TOLERANCE", NAT_ABSOLUTE_TOLERANCE),
         nat_relative_tolerance=_env_float("NAT_RELATIVE_TOLERANCE", NAT_RELATIVE_TOLERANCE),
@@ -101,9 +97,7 @@ def load_settings() -> Settings:
             "TELEGRAM_PUBLISH_RETRIES", TELEGRAM_PUBLISH_RETRIES
         ),
         generator_max_tokens=_env_int("GENERATOR_MAX_TOKENS", GENERATOR_MAX_TOKENS),
-        groq_request_interval_seconds=_env_int(
-            "GROQ_REQUEST_INTERVAL_SECONDS", GROQ_REQUEST_INTERVAL_SECONDS
-        ),
+        verifier_max_tokens=_env_int("VERIFIER_MAX_TOKENS", VERIFIER_MAX_TOKENS),
     )
 
 

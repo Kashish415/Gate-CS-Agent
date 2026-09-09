@@ -63,7 +63,6 @@ def build_graph(
 	chat_id: str,
 	max_retries: int = MAX_RETRIES_PER_SLOT,
 	min_confidence: int = 3,
-	groq_request_interval_seconds: int = 20,
 ) -> CompiledStateGraph:
 	graph = StateGraph(PipelineState)
 	graph.add_node(
@@ -71,7 +70,6 @@ def build_graph(
 		generate_node(
 			generator_model,
 			examples_lookup,
-			groq_request_interval_seconds,
 		),
 	)
 	graph.add_node("validate", validate_node(validators))
