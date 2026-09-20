@@ -435,25 +435,27 @@ wheels = [
 [[package]]
 name = "gate-cs-agent"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "deepeval" },
+    { name = "groq" },
     { name = "langchain-groq" },
     { name = "langgraph" },
     { name = "langsmith" },
     { name = "pydantic" },
-    { name = "python-dotenv" },
+    { name = "pydantic-settings" },
     { name = "python-telegram-bot" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "deepeval", specifier = ">=4.2.1" },
+    { name = "groq", specifier = ">=0.9.0" },
     { name = "langchain-groq", specifier = ">=0.2.0" },
     { name = "langgraph", specifier = ">=1.2.11" },
     { name = "langsmith", specifier = ">=0.12.1" },
     { name = "pydantic", specifier = ">=2.13.5" },
-    { name = "python-dotenv", specifier = ">=1.2.3" },
+    { name = "pydantic-settings", specifier = ">=2.0" },
     { name = "python-telegram-bot", specifier = ">=22.8" },
 ]
 

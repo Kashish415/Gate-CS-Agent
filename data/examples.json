@@ -1,217 +1,1074 @@
 {
-  "Algorithms / Divide and Conquer": [
+  "Operating System / Interrupt Handling": [
     {
-      "subtopic": "Divide and Conquer",
+      "subtopic": "Interrupt Handling",
       "type": "MCQ",
       "marks": 1,
-      "concept": "Merge sort divide step partitions the array into halves regardless of element values.",
-      "trap": "Confusing merge sort's divide step with partitioning in quicksort, which depends on the pivot.",
-      "question": "In merge sort, the divide step splits the input array into two halves of sizes:",
+      "concept": "Sequence of actions when an asynchronous interrupt arrives.",
+      "trap": "Starting the ISR before completing the current instruction.",
+      "question": "Suppose a program is running on a non-pipelined single processor computer system. The computer is connected to an external device that can interrupt the processor asynchronously. The processor needs to execute the interrupt service routine (ISR) to serve this interrupt. The following steps (not necessarily in order) are taken by the processor when the interrupt arrives:\n(i) The processor saves the content of the program counter.\n(ii) The program counter is loaded with the start address of the ISR.\n(iii) The processor finishes the present instruction.\nWhich ONE of the following is the CORRECT sequence of steps?",
       "options": [
-        "n/2 and n/2 if n is even, otherwise n/2 and n/2 + 1",
-        "Two halves such that all elements in the left half are smaller than all elements in the right half",
-        "Equal halves based on a randomly chosen pivot",
-        "Halves such that the median of the array is at the boundary"
+        "(A) (iii), (i), (ii)",
+        "(B) (i), (iii), (ii)",
+        "(C) (i), (ii), (iii)",
+        "(D) (iii), (ii), (i)"
       ],
       "answer": "A",
-      "explanation": "Merge sort splits by index only, producing halves of sizes floor(n/2) and ceil(n/2). Partitioning by value happens in quicksort, not in merge sort's divide step."
+      "explanation": "The current instruction is completed first, the return program counter is saved next, and the ISR address is then loaded."
     },
     {
-      "subtopic": "Divide and Conquer",
-      "type": "NAT",
-      "marks": 2,
-      "concept": "Solving a divide-and-conquer recurrence for a specific base case by direct substitution.",
-      "trap": "Substituting into the closed-form Theta(n log n) instead of unrolling the recurrence for the exact n given.",
-      "question": "Given T(n) = 2T(n/2) + n and T(1) = 0, what is the value of T(8)?",
-      "options": null,
-      "answer": 24.0,
-      "explanation": "T(1)=0, T(2)=2(0)+2=2, T(4)=2(2)+4=8, T(8)=2(8)+8=24. Direct substitution gives an exact value rather than relying on the asymptotic class alone."
-    },
-    {
-      "subtopic": "Divide and Conquer",
-      "type": "MSQ",
-      "marks": 2,
-      "concept": "Strassen's matrix multiplication beats the naive O(n^3) bound.",
-      "trap": "Selecting cubic-time algorithms or algorithms that do not actually use divide and conquer.",
-      "question": "Which of the following algorithms use a divide-and-conquer strategy? (Select all that apply.)",
-      "options": [
-        "Merge sort",
-        "Strassen's matrix multiplication",
-        "Selection sort",
-        "Closest pair of points in the plane"
-      ],
-      "answer": ["A", "B", "D"],
-      "explanation": "Merge sort, Strassen's, and the classic closest-pair algorithm all split the problem into subproblems, solve recursively, and combine. Selection sort is iterative and does not divide the input."
-    }
-  ],
-  "Operating Systems / Deadlocks": [
-    {
-      "subtopic": "Deadlocks",
+      "subtopic": "Symbol Table",
       "type": "MCQ",
       "marks": 1,
-      "concept": "All four Coffman conditions must hold simultaneously for a deadlock to exist.",
-      "trap": "Choosing 'no preemption' alone or 'circular wait' alone; either is necessary but not sufficient.",
-      "question": "Which of the following is true about Coffman conditions for deadlock?",
+      "concept": "Compiler symbol-table usage across phases.",
+      "trap": "Assuming the symbol table is discarded immediately after parsing.",
+      "question": "Which ONE of the following statements is FALSE regarding the symbol table?",
       "options": [
-        "Mutual exclusion alone is sufficient to cause a deadlock",
-        "Hold-and-wait alone is sufficient to cause a deadlock",
-        "All four conditions must hold simultaneously for a deadlock",
-        "Circular wait is sufficient even without mutual exclusion"
+        "(A) Symbol table is responsible for keeping track of the scope of variables.",
+        "(B) Symbol table can be implemented using a binary search tree.",
+        "(C) Symbol table is not required after the parsing phase.",
+        "(D) Symbol table is created during the lexical analysis phase."
       ],
       "answer": "C",
-      "explanation": "A deadlock requires all four conditions: mutual exclusion, hold-and-wait, no preemption, and circular wait. Any one condition alone is necessary but not sufficient."
+      "explanation": "The symbol table remains useful in later phases such as semantic analysis and code generation."
     },
     {
-      "subtopic": "Deadlocks",
-      "type": "MSQ",
-      "marks": 2,
-      "concept": "Deadlock prevention removes at least one of the four Coffman conditions.",
-      "trap": "Confusing prevention (breaking a condition a priori) with avoidance (Banker's algorithm).",
-      "question": "Which of the following are valid strategies for deadlock prevention? (Select all that apply.)",
-      "options": [
-        "Requiring all resources to be requested at once, removing hold-and-wait",
-        "Making all resources preemptable, removing no-preemption",
-        "Imposing a total ordering on resource acquisition, removing circular wait",
-        "Using the Banker's algorithm to test safe states"
-      ],
-      "answer": ["A", "B", "C"],
-      "explanation": "Options A, B, and C each remove one Coffman condition, which is the definition of prevention. The Banker's algorithm is avoidance, not prevention."
-    },
-    {
-      "subtopic": "Deadlocks",
-      "type": "NAT",
-      "marks": 2,
-      "concept": "Resource allocation graphs encode allocation and request edges between processes and resources.",
-      "trap": "Counting instances of resources versus counting request edges when reasoning about cycles.",
-      "question": "A system has 3 processes P1, P2, P3 and 2 identical instances of resource R. Each process may request at most 1 instance at a time. What is the maximum number of processes that can hold R simultaneously without a cycle being possible?",
-      "options": null,
-      "answer": 2.0,
-      "explanation": "With 2 instances of R, at most 2 processes can hold the resource at once. A cycle in a single-resource instance graph requires at least as many request edges as instances plus one, which is impossible here."
-    }
-  ],
-  "DBMS / Normalization": [
-    {
-      "subtopic": "Normalization",
+      "subtopic": "Live Variable Analysis",
       "type": "MCQ",
       "marks": 1,
-      "concept": "Third Normal Form (3NF) allows transitive dependencies as long as the determinant is a candidate key or the dependent is a prime attribute.",
-      "trap": "Confusing 3NF with BCNF, which forbids any non-trivial dependency where the determinant is not a superkey.",
-      "question": "A relation R is in 3NF but not in BCNF. The most likely reason is:",
+      "concept": "Use of live-variable analysis in register allocation.",
+      "trap": "Associating live-variable analysis primarily with constant folding.",
+      "question": "Which ONE of the following techniques used in compiler code optimization uses live variable analysis?",
       "options": [
-        "R has a non-prime attribute that depends on a non-superkey",
-        "R has a functional dependency X -> A where X is not a superkey and A is not a prime attribute",
-        "R has a multivalued dependency",
-        "R is not in 1NF"
+        "(A) Run-time function call management",
+        "(B) Register assignment to variables",
+        "(C) Strength reduction",
+        "(D) Constant folding"
       ],
       "answer": "B",
-      "explanation": "3NF permits a non-superkey determinant when the dependent attribute is prime. BCNF forbids this entirely. Multivalued dependencies relate to 4NF, not the 3NF/BCNF distinction."
+      "explanation": "Live-variable information helps determine which values need registers and when registers can be reused."
     },
     {
-      "subtopic": "Normalization",
-      "type": "MSQ",
-      "marks": 2,
-      "concept": "Lossless-join decomposition preserves the ability to reconstruct the original relation via natural join.",
-      "trap": "Conflating lossless join with dependency preservation; a decomposition can be one without the other.",
-      "question": "Which of the following are guaranteed by a lossless-join decomposition of R into R1 and R2? (Select all that apply.)",
-      "options": [
-        "R1 join R2 over their common attributes equals R",
-        "Every functional dependency in R is preserved in either R1 or R2",
-        "The common attributes of R1 and R2 form a superkey of at least one of them",
-        "R1 and R2 are each in 3NF"
-      ],
-      "answer": ["A", "C"],
-      "explanation": "Lossless join is exactly the property that the natural join reproduces R, and the standard sufficient condition is that the shared attributes form a superkey of one of the parts. Dependency preservation (B) and normalization to 3NF (D) are independent properties."
-    },
-    {
-      "subtopic": "Normalization",
-      "type": "NAT",
-      "marks": 2,
-      "concept": "Minimum number of tables needed to represent an n-attribute relation in BCNF without loss of information.",
-      "trap": "Assuming decomposition always collapses to 2 tables; the count depends on the dependency set.",
-      "question": "A relation has attributes A, B, C with functional dependencies A -> B and A -> C. What is the minimum number of relations required to put this into BCNF?",
-      "options": null,
-      "answer": 1.0,
-      "explanation": "A is a key and the only determinant. Since every FD has a superkey on the left, the original relation is already in BCNF, requiring no decomposition. Answer is 1."
-    }
-  ],
-  "Computer Networks / IP Addressing and Subnetting": [
-    {
-      "subtopic": "IP Addressing and Subnetting",
+      "subtopic": "Page Table Size",
       "type": "MCQ",
       "marks": 1,
-      "concept": "A /26 subnet mask leaves 6 host bits, giving 2^6 - 2 = 62 usable host addresses.",
-      "trap": "Forgetting to subtract 2 for network and broadcast addresses, or miscounting bits.",
-      "question": "How many usable host addresses does a /26 IPv4 subnet provide?",
-      "options": ["62", "64", "126", "128"],
+      "concept": "Number of page-table entries from logical address size and page size.",
+      "trap": "Using physical-address bits instead of logical-address bits.",
+      "question": "Consider a demand paging memory management system with 32-bit logical address, 20-bit physical address, and page size of 2048 bytes. Assuming that the memory is byte addressable, what is the maximum number of entries in the page table?",
+      "options": [
+        "(A) 2^21",
+        "(B) 2^20",
+        "(C) 2^22",
+        "(D) 2^24"
+      ],
       "answer": "A",
-      "explanation": "A /26 leaves 32 - 26 = 6 host bits. Total addresses are 2^6 = 64; subtract 2 for the network and broadcast addresses to get 62 usable hosts."
-    },
-    {
-      "subtopic": "IP Addressing and Subnetting",
-      "type": "NAT",
-      "marks": 2,
-      "concept": "CIDR block aggregation: number of addresses equals 2^(32 - prefix length).",
-      "trap": "Using the wrong exponent or forgetting that the block size is 2^(32 - prefix).",
-      "question": "An organization is allocated the CIDR block 192.168.10.0/22. How many total IPv4 addresses does this block contain?",
-      "options": null,
-      "answer": 1024.0,
-      "explanation": "A /22 leaves 32 - 22 = 10 host bits, giving 2^10 = 1024 total addresses. (Usable hosts would be 1022, but the question asks for total addresses.)"
-    },
-    {
-      "subtopic": "IP Addressing and Subnetting",
-      "type": "MSQ",
-      "marks": 2,
-      "concept": "Classless addressing and CIDR replaced the rigid classful scheme so that prefix lengths can be any value.",
-      "trap": "Selecting classful rules (Class A/B/C boundaries) which are no longer the basis of subnetting.",
-      "question": "Which of the following statements about IPv4 subnetting are TRUE? (Select all that apply.)",
-      "options": [
-        "A /30 subnet has 2 usable host addresses",
-        "Subnet zero (all-zeros) and all-ones subnets are usable under CIDR",
-        "The default mask for a Class B network is /16",
-        "A subnet with prefix /31 has 0 usable host addresses for point-to-point links under RFC 3021"
-      ],
-      "answer": ["A", "B", "C", "D"],
-      "explanation": "All four are true. /30 has 2 usable hosts, CIDR permits use of the zero and all-ones subnets, Class B default is /16, and /31 has 0 usable hosts but is permitted for point-to-point links under RFC 3021."
+      "explanation": "2048 bytes gives an 11-bit page offset. Hence the logical page number has 21 bits, giving 2^21 possible pages."
     }
   ],
-  "Data Structures / Hashing": [
+  "Databases / Transaction Recovery": [
     {
-      "subtopic": "Hashing",
+      "subtopic": "Cascading Rollback",
       "type": "MCQ",
       "marks": 1,
-      "concept": "Under simple uniform hashing, the expected number of probes for successful search in a chained hash table is 1 + alpha/2, where alpha is the load factor.",
-      "trap": "Confusing successful search (1 + alpha/2) with unsuccessful search (1 + alpha).",
-      "question": "For a chained hash table with load factor alpha, the expected number of probes for a successful search under simple uniform hashing is:",
-      "options": ["1 + alpha", "1 + alpha/2", "alpha", "log(1 + alpha)"],
+      "concept": "Rollback propagation caused by reading uncommitted data.",
+      "trap": "Ignoring transactions that read a value written by the aborting transaction.",
+      "question": "A schedule of three database transactions T1, T2, and T3 is shown. Ri(A) and Wi(A) denote read and write of data item A by transaction Ti, i = 1,2,3. The transaction T1 aborts at the end. Which other transaction(s) will be required to be rolled back?\nR1(X) W1(Y) R2(X) R2(Y) R3(Y) ABORT(T1)",
+      "options": [
+        "(A) Only T2",
+        "(B) Only T3",
+        "(C) Both T2 and T3",
+        "(D) Neither T2 nor T3"
+      ],
+      "answer": "C",
+      "explanation": "Both T2 and T3 read Y after T1 wrote Y and before T1 committed, so both depend on T1's uncommitted value."
+    }
+  ],
+  "Computer Networks / OSI Model": [
+    {
+      "subtopic": "OSI Layer Functions",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Mapping OSI layers to their functions.",
+      "trap": "Confusing network routing with transport-layer communication.",
+      "question": "Identify the ONE CORRECT matching between the OSI layers and their corresponding functionalities as shown.\n(a) Network layer (I) Packet routing\n(b) Transport layer (II) Framing and error handling\n(c) Datalink layer (III) Host to host communication",
+      "options": [
+        "(A) (a)-(I), (b)-(II), (c)-(III)",
+        "(B) (a)-(I), (b)-(III), (c)-(II)",
+        "(C) (a)-(II), (b)-(I), (c)-(III)",
+        "(D) (a)-(III), (b)-(II), (c)-(I)"
+      ],
       "answer": "B",
-      "explanation": "For a successful search, on average we search half the chain, giving 1 + alpha/2. Unsuccessful search traverses the whole chain on average, giving 1 + alpha."
+      "explanation": "Network handles routing, transport provides host-to-host communication, and data link handles framing and link-level error handling."
+    }
+  ],
+  "Engineering Mathematics / Functions": [
+    {
+      "subtopic": "Composition of Functions",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Surjectivity of a function and its composition.",
+      "trap": "Assuming surjectivity of f and f∘g forces g to be bijective.",
+      "question": "g(.) is a function from A to B, f(.) is a function from B to C, and their composition defined as f(g(.)) is a mapping from A to C. If f(.) and f(g(.)) are onto (surjective) functions, which ONE of the following is TRUE about the function g(.)?",
+      "options": [
+        "(A) g(.) must be an onto (surjective) function.",
+        "(B) g(.) must be a one-to-one (injective) function.",
+        "(C) g(.) must be a bijective function, that is, both one-to-one and onto.",
+        "(D) g(.) is not required to be a one-to-one or onto function."
+      ],
+      "answer": "D",
+      "explanation": "The assumptions do not force g to be injective or onto B."
+    }
+  ],
+  "Algorithms / MST": [
+    {
+      "subtopic": "MST and Shortest Paths",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Comparing shortest-path distances in a graph and an MST.",
+      "trap": "Assuming an MST preserves all shortest paths.",
+      "question": "Let G be any undirected graph with positive edge weights, and T be a minimum spanning tree of G. For any two vertices, u and v, let d1(u,v) and d2(u,v) be the shortest distances between u and v in G and T, respectively. Which ONE of the options is CORRECT for all possible G, T, u and v?",
+      "options": [
+        "(A) d1(u,v) = d2(u,v)",
+        "(B) d1(u,v) ≤ d2(u,v)",
+        "(C) d1(u,v) ≥ d2(u,v)",
+        "(D) d1(u,v) ≠ d2(u,v)"
+      ],
+      "answer": "B",
+      "explanation": "Every T-path is also a G-path, so the unrestricted shortest path in G cannot be longer than the tree-only shortest path."
+    }
+  ],
+  "Theory of Computation / CFG": [
+    {
+      "subtopic": "Language Generated by CFG",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Deriving a CFL directly from productions.",
+      "trap": "Assuming the grammar forces equal numbers of a and b.",
+      "question": "Consider the following context-free grammar G, where S, A, and B are the variables (non-terminals), a and b are the terminal symbols, S is the start variable, and the rules of G are described as:\nS → aaB | Abb\nA → a | aA\nB → b | bB\nWhich ONE of the languages L(G) is accepted by G?",
+      "options": [
+        "(A) L(G) = {a^2b^n | n ≥ 1} ∪ {a^nb^2 | n ≥ 1}",
+        "(B) L(G) = {a^nb^(2n) | n ≥ 1} ∪ {a^(2n)b^n | n ≥ 1}",
+        "(C) L(G) = {a^nb^n | n ≥ 1}",
+        "(D) L(G) = {a^(2n)b^(2n) | n ≥ 1}"
+      ],
+      "answer": "A",
+      "explanation": "aaB produces exactly two a's followed by one or more b's; Abb produces one or more a's followed by exactly two b's."
     },
     {
-      "subtopic": "Hashing",
+      "subtopic": "LL(1) Parsing Table",
+      "type": "MCQ",
+      "marks": 2,
+      "concept": "Construction of missing LL(1) parsing-table entries from FIRST and FOLLOW sets.",
+      "trap": "Using FOLLOW where FIRST is required or filling epsilon productions in inappropriate columns.",
+      "question": "Consider the following context-free grammar where the start symbol is S and the set of terminals is {a,b,c,d}.\nS → AaAb | BbBa\nA → cS | ε\nB → dS | ε\nThe following is a partially-filled LL(1) parsing table.\nWhich one of the following options represents the CORRECT combination for the numbered cells in the parsing table?",
+      "options": [
+        "(A) (1) S → AaAb (2) S → BbBa (3) A → ε (4) B → ε",
+        "(B) (1) S → BbBa (2) S → AaAb (3) A → ε (4) B → ε",
+        "(C) (1) S → AaAb (2) S → BbBa (3) blank (4) blank",
+        "(D) (1) S → BbBa (2) S → AaAb (3) blank (4) blank"
+      ],
+      "answer": "D",
+      "explanation": "The correct entries follow from FIRST(AaAb), FIRST(BbBa), and the epsilon-triggered FOLLOW placements for A and B."
+    }
+  ],
+  "Computer Organization and Architecture / Two's Complement": [
+    {
+      "subtopic": "Two's Complement Sign Extension",
+      "type": "MSQ",
+      "marks": 1,
+      "concept": "Representing a negative number with wider two's-complement widths.",
+      "trap": "Zero-extending a negative number.",
+      "question": "The number −6 can be represented as 1010 in 4-bit 2’s complement representation. Which of the following is/are CORRECT 2’s complement representation(s) of −6?",
+      "options": [
+        "(A) 1000 1010 in 8-bits",
+        "(B) 1111 1010 in 8-bits",
+        "(C) 1000 0000 0000 1010 in 16-bits",
+        "(D) 1111 1111 1111 1010 in 16-bits"
+      ],
+      "answer": [
+        "B",
+        "D"
+      ],
+      "explanation": "Negative two's-complement values are sign-extended with ones."
+    },
+    {
+      "subtopic": "Arithmetic Overflow",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Detecting signed overflow in 4-bit two's-complement addition.",
+      "trap": "Treating the operands as unsigned values.",
+      "question": "Let R1 and R2 be two 4-bit registers that store numbers in 2’s complement form. For the operation R1+R2, which one of the following values of R1 and R2 gives an arithmetic overflow?",
+      "options": [
+        "(A) R1 = 1011 and R2 = 1110",
+        "(B) R1 = 1100 and R2 = 1010",
+        "(C) R1 = 0011 and R2 = 0100",
+        "(D) R1 = 1001 and R2 = 1111"
+      ],
+      "answer": "B",
+      "explanation": "1100 is −4 and 1010 is −6. Their sum −10 lies outside the 4-bit range −8 to +7."
+    }
+  ],
+  "Programming and Data Structures / BST": [
+    {
+      "subtopic": "BST Properties",
+      "type": "MSQ",
+      "marks": 1,
+      "concept": "General properties of a binary search tree.",
+      "trap": "Assuming all BST searches are logarithmic.",
+      "question": "Which of the following statement(s) is/are TRUE for any binary search tree (BST) having n distinct integers?",
+      "options": [
+        "(A) The maximum length of a path from the root node to any other node is (n − 1).",
+        "(B) An inorder traversal will always produce a sorted sequence of elements.",
+        "(C) Finding an element takes O(log2 n) time in the worst case.",
+        "(D) Every BST is also a Min-Heap."
+      ],
+      "answer": [
+        "A",
+        "B"
+      ],
+      "explanation": "A skewed BST can have height n−1, and inorder traversal is sorted. Worst-case search can be O(n), and BST order does not imply heap order."
+    }
+  ],
+  "Algorithms / Recurrence Relations": [
+    {
+      "subtopic": "Linear Recurrence",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Solving a second-order linear recurrence using characteristic roots.",
+      "trap": "Choosing the asymptotic order from the largest initial term instead of solving the characteristic equation.",
+      "question": "Let T(n) be the recurrence relation defined as follows:\nT(0) = 1,\nT(1) = 2, and\nT(n) = 5T(n − 1) − 6T(n − 2) for n ≥ 2\nWhich one of the following statements is TRUE?",
+      "options": [
+        "(A) T(n) = Θ(2^n)",
+        "(B) T(n) = Θ(n2^n)",
+        "(C) T(n) = Θ(3^n)",
+        "(D) T(n) = Θ(n3^n)"
+      ],
+      "answer": "C",
+      "explanation": "The characteristic equation r²−5r+6=0 has roots 2 and 3. The 3^n term has nonzero coefficient, so T(n)=Θ(3^n)."
+    },
+    {
+      "subtopic": "Definite Integral",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Using symmetry of a continuous function in a definite integral.",
+      "trap": "Trying to integrate f directly even though its defining symmetry immediately determines the integral.",
+      "question": "Let f(x) be a continuous function from ℝ to ℝ such that\nf(x) = 1 − f(2 − x)\nWhich one of the following options is the CORRECT value of ∫ f(x) dx from 0 to 2?",
+      "options": [
+        "(A) 0",
+        "(B) 1",
+        "(C) 2",
+        "(D) −1"
+      ],
+      "answer": "B",
+      "explanation": "Integrating the relation from 0 to 2 and substituting u=2−x gives I = 2−I, so I=1."
+    }
+  ],
+  "Engineering Mathematics / System of Equations": [
+    {
+      "subtopic": "Consistency of Linear Equations",
+      "type": "MSQ",
+      "marks": 1,
+      "concept": "Parameter values producing unique, inconsistent, or infinitely many solutions.",
+      "trap": "Checking only the determinant and ignoring compatibility when it is zero.",
+      "question": "Consider the given system of linear equations for variables x and y, where k is a real-valued constant. Which of the following option(s) is/are CORRECT?\nx + ky = 1\nkx + y = −1",
+      "options": [
+        "(A) There is exactly one value of k for which the above system of equations has no solution.",
+        "(B) There exist an infinite number of values of k for which the system of equations has no solution.",
+        "(C) There is exactly one value of k for which the system has exactly one solution.",
+        "(D) There are infinitely many values of k for which the system has exactly one solution."
+      ],
+      "answer": [
+        "A",
+        "D"
+      ],
+      "explanation": "The determinant is 1−k². At k=1 the equations are inconsistent; at k=−1 they coincide; every other k gives a unique solution."
+    }
+  ],
+  "Operating System / Ready Queue": [
+    {
+      "subtopic": "I/O and Ready Queue",
+      "type": "NAT",
+      "marks": 1,
+      "concept": "Counting ready-queue entries caused by repeated I/O operations.",
+      "trap": "Counting the initial ready-queue entry.",
+      "question": "Suppose in a multiprogramming environment, the following C program segment is executed. A process goes into I/O queue whenever an I/O related operation is performed. Assume that there will always be a context switch whenever a process requests for an I/O, and also whenever the process returns from an I/O. The number of times the process will enter the ready queue during its lifetime (not counting the time the process enters the ready queue when it is run initially) is _______.\nint main()\n{\n int x=0,i=0;\n scanf(\"%d\",&x);\n for(i=0; i<20; i++)\n {\n  x = x+20;\n  printf(\"%d\\n\",x);\n }\n return 0;\n}",
+      "options": null,
+      "answer": 21.0,
+      "explanation": "There is one scanf and twenty printf operations, so there are 21 I/O returns to the ready queue."
+    }
+  ],
+  "Algorithms / Bubble Sort": [
+    {
+      "subtopic": "Bubble Sort",
+      "type": "NAT",
+      "marks": 1,
+      "concept": "Worst-case number of swaps in bubble sort.",
+      "trap": "Counting comparisons rather than swaps.",
+      "question": "The pseudocode of a function fun() is given below:\nfun(int A[0,…,n-1]){\n for i=0 to n-2\n  for j=0 to n-i-2\n   if (A[j]>A[j+1])\n   then swap A[j] and A[j+1]\n}\nLet A[0, …,29] be an array storing 30 distinct integers in descending order. The number of swap operations that will be performed, if the function fun() is called with A[0, …,29] as argument, is _______. (Answer in integer)",
+      "options": null,
+      "answer": 435.0,
+      "explanation": "A reverse-sorted array has 30×29/2 = 435 inversions, and bubble sort performs one swap per inversion."
+    }
+  ],
+  "Programming and Data Structures / C Pointers": [
+    {
+      "subtopic": "Pointers and Pass-by-Value",
+      "type": "NAT",
+      "marks": 1,
+      "concept": "Modifying a caller variable through a pointer parameter.",
+      "trap": "Assuming the pointer itself is passed by reference.",
+      "question": "#include <stdio.h>\nvoid foo(int *p, int x){\n *p=x;\n}\nint main(){\n int *z;\n int a = 20, b = 25;\n z = &a;\n foo(z,b);\n printf(\"%d\",a);\n return 0;\n}\nThe output of the given C program is _______. (Answer in integer)",
+      "options": null,
+      "answer": 25.0,
+      "explanation": "z points to a, so *p=x assigns 25 to a."
+    }
+  ],
+  "Programming and Data Structures / Heap Height": [
+    {
+      "subtopic": "Binary Heap Height",
+      "type": "NAT",
+      "marks": 1,
+      "concept": "Height of a complete binary tree containing 32 keys.",
+      "trap": "Counting levels instead of edges.",
+      "question": "The height of any rooted tree is defined as the maximum number of edges in the path from the root node to any leaf node. Suppose a Min-Heap T stores 32 keys. The height of T is _____________. (Answer in integer)",
+      "options": null,
+      "answer": 5.0,
+      "explanation": "A complete binary tree with 32 nodes has 6 levels, hence height 5 edges."
+    }
+  ],
+  "Databases / Functional Dependencies": [
+    {
+      "subtopic": "Armstrong's Axioms",
+      "type": "MSQ",
+      "marks": 1,
+      "concept": "Reflexivity, augmentation, and transitivity of functional dependencies.",
+      "trap": "Assuming a dependency with extra attributes on the left can be simplified arbitrarily.",
+      "question": "The symbol → indicates functional dependency in the context of a relational database. Which of the following options is/are TRUE?",
+      "options": [
+        "(A) (X,Y) → (Z,W) implies X → (Z,W)",
+        "(B) (X,Y) → (Z,W) implies (X,Y) → Z",
+        "(C) ((X,Y) → Z and W → Y) implies (X,W) → Z",
+        "(D) (X → Y and Y → Z) implies X → Z"
+      ],
+      "answer": [
+        "B",
+        "C",
+        "D"
+      ],
+      "explanation": "B follows by decomposition, C by augmentation plus transitivity, and D by transitivity. A is not generally valid."
+    }
+  ],
+  "Theory of Computation / DFA": [
+    {
+      "subtopic": "NFA to DFA State Bound",
+      "type": "MSQ",
+      "marks": 1,
+      "concept": "State relationships between an NFA and equivalent DFA.",
+      "trap": "Treating 2^n as a mandatory DFA size rather than an upper bound.",
+      "question": "A regular language L is accepted by a non-deterministic finite automaton (NFA) with n states. Which of the following statement(s) is/are FALSE?",
+      "options": [
+        "(A) L may have an accepting NFA with < n states.",
+        "(B) L may have an accepting DFA with < n states.",
+        "(C) There exists a DFA with ≤ 2^n states that accepts L.",
+        "(D) Every DFA that accepts L has > 2^n states."
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "Subset construction gives an equivalent DFA with at most 2^n states."
+    }
+  ],
+  "Operating System / Thread Synchronization": [
+    {
+      "subtopic": "Semaphores and Deadlock",
+      "type": "MSQ",
+      "marks": 1,
+      "concept": "Possible outcomes with two shared semaphores and two threads.",
+      "trap": "Ignoring the blocking dependency created by wait(s2) in T1.",
+      "question": "Consider a multi-threaded program with two threads T1 and T2. The threads share two semaphores: s1 (initialized to 1) and s2 (initialized to 0). The threads also share a global variable x (initialized to 0). The threads execute the code shown below. Which of the following outcomes is/are possible when threads T1 and T2 execute concurrently?",
+      "options": [
+        "(A) T1 runs first and prints 1, T2 runs next and prints 2",
+        "(B) T2 runs first and prints 1, T1 runs next and prints 2",
+        "(C) T1 runs first and prints 1, T2 does not print anything (deadlock)",
+        "(D) T2 runs first and prints 1, T1 does not print anything (deadlock)"
+      ],
+      "answer": [
+        "A",
+        "C"
+      ],
+      "explanation": "T2 cannot start before T1 because s1 is held by T1. After T1 prints, it can block on s2, creating a deadlock before T2 can acquire s1; alternatively T1 signals through T2 and both can complete."
+    }
+  ],
+  "Programming and Data Structures / Binary Heap": [
+    {
+      "subtopic": "Max-Heap",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Checking the max-heap property in an array representation.",
+      "trap": "Checking only the root instead of every parent-child relationship.",
+      "question": "Which one of the following sequences when stored in an array at locations A[1],...,A[10] forms a max-heap?",
+      "options": [
+        "(A) 23, 17, 10, 6, 13, 14, 1, 5, 7, 12",
+        "(B) 23, 17, 14, 7, 13, 10, 1, 5, 6, 12",
+        "(C) 23, 17, 14, 6, 13, 10, 1, 5, 7, 15",
+        "(D) 23, 14, 17, 1, 10, 13, 16, 12, 7, 5"
+      ],
+      "answer": "B",
+      "explanation": "Every parent in option B is at least as large as its children."
+    }
+  ],
+  "Programming and Data Structures / Linked Lists": [
+    {
+      "subtopic": "Deletion in Linked Lists",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Worst-case deletion complexity when a node pointer and head pointer are available.",
+      "trap": "Assuming a singly-linked list needs only constant-time pointer updates.",
+      "question": "Let SLLdel be a function that deletes a node in a singly-linked list given a pointer to the node and a pointer to the head of the list. Similarly, let DLLdel be another function that deletes a node in a doubly-linked list given a pointer to the node and a pointer to the head of the list. Let n denote the number of nodes in each of the linked lists. Which one of the following choices is TRUE about the worst-case time complexity of SLLdel and DLLdel?",
+      "options": [
+        "(A) SLLdel is O(1) and DLLdel is O(n)",
+        "(B) Both SLLdel and DLLdel are O(log(n))",
+        "(C) Both SLLdel and DLLdel are O(1)",
+        "(D) SLLdel is O(n) and DLLdel is O(1)"
+      ],
+      "answer": "D",
+      "explanation": "Singly-linked deletion needs the predecessor, which may require a scan; doubly-linked deletion can use the previous pointer directly."
+    }
+  ],
+  "Theory of Computation / DFA to Regular Expression": [
+    {
+      "subtopic": "Regular Expression from DFA",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Obtaining a regular expression equivalent to a DFA.",
+      "trap": "Ignoring the transition structure and accepting strings that cannot return to the final state.",
+      "question": "Consider the Deterministic Finite-state Automaton (DFA) A shown below. The DFA runs on the alphabet {0, 1}, and has the set of states {s, p, q, r}, with s being the start state and p being the only final state. Which one of the following regular expressions correctly describes the language accepted by A?",
+      "options": [
+        "(A) 1(0∗11)∗",
+        "(B) 0(0 + 1)∗",
+        "(C) 1(0 + 11)∗",
+        "(D) 1(110∗)∗"
+      ],
+      "answer": "A",
+      "explanation": "The accepted strings can be described as an initial 1 followed by zero or more repetitions of a zero or a pair of ones."
+    }
+  ],
+  "Algorithms / Asymptotic Analysis": [
+    {
+      "subtopic": "Linear vs Quadratic Growth",
+      "type": "MSQ",
+      "marks": 1,
+      "concept": "O, o, Ω and Θ relationships for n and n².",
+      "trap": "Confusing little-o with ordinary O or Ω.",
+      "question": "Let f and g be functions of natural numbers given by f(n)= n and g(n)= n2. Which of the following statements is/are TRUE?",
+      "options": [
+        "(A) f ∈ O(g)",
+        "(B) f ∈ Ω(g)",
+        "(C) f ∈ o(g)",
+        "(D) f ∈ Θ(g)"
+      ],
+      "answer": [
+        "A",
+        "C"
+      ],
+      "explanation": "n is bounded above by a constant multiple of n² and grows strictly slower than n²."
+    },
+    {
+      "subtopic": "Function Growth",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Comparing exponentials and iterated logarithmic transformations.",
+      "trap": "Applying asymptotic identities without checking the stated class of f.",
+      "question": "Which one of the following statements is TRUE for all positive functions f(n)?",
+      "options": [
+        "(A) 2^f(n) = θ(f(n)) when f(n) is a polynomial",
+        "(B) 2^f(n) = o(f(n))",
+        "(C) 2^f(n) = O(f(n)) when f(n) is an exponential function",
+        "(D) 2^f(n) = Ω(f(n))"
+      ],
+      "answer": "D",
+      "explanation": "For every positive f(n), 2^f(n) grows at least as fast as a constant multiple of f(n) for sufficiently large positive f(n)."
+    }
+  ],
+  "Operating System / Context Switch": [
+    {
+      "subtopic": "Thread Context Switch",
+      "type": "MSQ",
+      "marks": 1,
+      "concept": "Thread-specific processor state that must be saved.",
+      "trap": "Saving process-wide page-table state during a same-process thread switch.",
+      "question": "Which one or more of the following need to be saved on a context switch from one thread (T1) of a process to another thread (T2) of the same process?",
+      "options": [
+        "(A) Page table base register",
+        "(B) Stack pointer",
+        "(C) Program counter",
+        "(D) General purpose registers"
+      ],
+      "answer": [
+        "B",
+        "C",
+        "D"
+      ],
+      "explanation": "Each thread has its own stack pointer, program counter, and register state, while the page table is shared by the process."
+    }
+  ],
+  "Operating System / User and Kernel Mode": [
+    {
+      "subtopic": "Mode Switch",
+      "type": "MSQ",
+      "marks": 1,
+      "concept": "Events that guarantee transition to kernel mode.",
+      "trap": "Treating all library calls as guaranteed system calls.",
+      "question": "Which one or more of the following options guarantee that a computer system will transition from user mode to kernel mode?",
+      "options": [
+        "(A) Function Call",
+        "(B) malloc Call",
+        "(C) Page Fault",
+        "(D) System Call"
+      ],
+      "answer": [
+        "C",
+        "D"
+      ],
+      "explanation": "Page faults are traps handled by the OS, and system calls explicitly transfer control to the kernel."
+    }
+  ],
+  "Operating System / CPU Scheduling": [
+    {
+      "subtopic": "Starvation",
+      "type": "MSQ",
+      "marks": 1,
+      "concept": "Scheduling algorithms that can indefinitely postpone processes.",
+      "trap": "Assuming variable waiting time is the same as starvation.",
+      "question": "Which one or more of the following CPU scheduling algorithms can potentially cause starvation?",
+      "options": [
+        "(A) First-in First-Out",
+        "(B) Round Robin",
+        "(C) Priority Scheduling",
+        "(D) Shortest Job First"
+      ],
+      "answer": [
+        "C",
+        "D"
+      ],
+      "explanation": "Low-priority processes can starve under priority scheduling, and long jobs can starve under SJF if shorter jobs keep arriving."
+    }
+  ],
+  "Computer Organization and Architecture / Radix Conversion": [
+    {
+      "subtopic": "Radix Conversion",
+      "type": "NAT",
+      "marks": 1,
+      "concept": "Conversion of a number from base 4 to base 5.",
+      "trap": "Interpreting 132 as decimal before conversion.",
+      "question": "A particular number is written as 132 in radix-4 representation. The same number in radix-5 representation is ______.",
+      "options": null,
+      "answer": 110.0,
+      "explanation": "132₄ = 1×16 + 3×4 + 2 = 30₁₀ = 110₅."
+    }
+  ],
+  "Computer Organization and Architecture / Pipeline": [
+    {
+      "subtopic": "Pipeline Execution Time",
+      "type": "NAT",
+      "marks": 1,
+      "concept": "Execution time of a three-stage pipeline.",
+      "trap": "Multiplying instruction count by total stage delays instead of using the bottleneck stage and pipeline fill.",
+      "question": "Consider a 3-stage pipelined processor having a delay of 10 ns (nanoseconds), 20 ns, and 14 ns, for the first, second, and the third stages, respectively. Assume that there is no other delay and the processor does not suffer from any pipeline hazards. Also assume that one instruction is fetched every cycle. The total execution time for executing 100 instructions on this processor is ______ ns.",
+      "options": null,
+      "answer": 2040.0,
+      "explanation": "The clock cycle is 20 ns. Three stages require 3+100−1 = 102 cycles, so the total is 2040 ns."
+    }
+  ],
+  "Operating System / I/O": [
+    {
+      "subtopic": "Polling vs Interrupts",
+      "type": "NAT",
+      "marks": 1,
+      "concept": "CPU overhead comparison between polling and interrupt-driven I/O.",
+      "trap": "Ignoring the cost of all periodic polls.",
+      "question": "A keyboard connected to a computer is used at a rate of 1 keystroke per second. The computer system polls the keyboard every 10 ms (milli seconds) to check for a keystroke and consumes 100 μs (micro seconds) for each poll. If it is determined after polling that a key has been pressed, the system consumes an additional 200 μs to process the keystroke. Let T1 denote the fraction of a second spent in polling and processing a keystroke.\nIn an alternative implementation, the system uses interrupts instead of polling. An interrupt is raised for every keystroke. It takes a total of 1 ms for servicing an interrupt and processing a keystroke. Let T2 denote the fraction of a second spent in servicing the interrupt and processing a keystroke.\nThe ratio T1/T2 is ______. (Rounded off to one decimal place)",
+      "options": null,
+      "answer": 10.2,
+      "explanation": "100 polls cost 10 ms and the keypress adds 0.2 ms, so T1=10.2 ms; T2=1 ms."
+    }
+  ],
+  "Programming and Data Structures / C Static Variable": [
+    {
+      "subtopic": "Static Local Variable",
+      "type": "NAT",
+      "marks": 1,
+      "concept": "Persistence of a static local variable across calls.",
+      "trap": "Reinitializing the static variable on the second function call.",
+      "question": "The integer value printed by the ANSI-C program given below is ______.\n#include<stdio.h>\nint funcp(){\nstatic int x = 1;\nx++;\nreturn x;\n}\nint main(){\nint x,y;\nx = funcp();\ny = funcp()+x;\nprintf(\"%d\\n\", (x+y));\nreturn 0;\n}",
+      "options": null,
+      "answer": 7.0,
+      "explanation": "The static x becomes 2 on the first call and 3 on the second. The local values are x=2 and y=5, giving 7."
+    }
+  ],
+  "Computer Networks / Stop-and-Wait": [
+    {
+      "subtopic": "Stop-and-Wait Utilization",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Effect of propagation delay and transmission rate on utilization.",
+      "trap": "Assuming higher bandwidth always improves Stop-and-Wait utilization.",
+      "question": "Suppose two hosts are connected by a point-to-point link and they are configured to use Stop-and-Wait protocol for reliable data transfer. Identify in which one of the following scenarios, the utilization of the link is the lowest.",
+      "options": [
+        "(A) Longer link length and lower transmission rate",
+        "(B) Longer link length and higher transmission rate",
+        "(C) Shorter link length and lower transmission rate",
+        "(D) Shorter link length and higher transmission rate"
+      ],
+      "answer": "B",
+      "explanation": "Long propagation delay and short transmission time make the protocol spend the greatest fraction of time waiting."
+    }
+  ],
+  "Computer Organization and Architecture / Multiplexer": [
+    {
+      "subtopic": "Multiplexer with Feedback",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Recognizing a storage element formed by multiplexer feedback.",
+      "trap": "Treating the feedback multiplexer as a purely combinational circuit.",
+      "question": "The output of a 2-input multiplexer is connected back to one of its inputs as shown in the figure. Match the functional equivalence of this circuit to one of the following options.",
+      "options": [
+        "(A) D Flip-flop",
+        "(B) D Latch",
+        "(C) Half-adder",
+        "(D) Demultiplexer"
+      ],
+      "answer": "B",
+      "explanation": "The feedback path allows the circuit to retain its previous value when the input is not selected, giving latch behavior."
+    }
+  ],
+  "Databases / Relation Arity": [
+    {
+      "subtopic": "Relation Degree",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Meaning of degree or arity of a relation.",
+      "trap": "Confusing degree with cardinality.",
+      "question": "Which one of the options given below refers to the degree (or arity) of a relation in relational database systems?",
+      "options": [
+        "(A) Number of attributes of its relation schema.",
+        "(B) Number of tuples stored in the relation.",
+        "(C) Number of entries in the relation.",
+        "(D) Number of distinct domains of its relation schema."
+      ],
+      "answer": "A",
+      "explanation": "Degree is the number of attributes in the relation schema."
+    }
+  ],
+  "Computer Networks / OSPF": [
+    {
+      "subtopic": "OSPF Routing",
+      "type": "MSQ",
+      "marks": 1,
+      "concept": "OSPF is a link-state intra-domain routing protocol using Dijkstra.",
+      "trap": "Confusing OSPF with Bellman-Ford or inter-domain routing.",
+      "question": "Which of the following statements is/are INCORRECT about the OSPF (Open Shortest Path First) routing protocol used in the Internet?",
+      "options": [
+        "(A) OSPF implements Bellman-Ford algorithm to find shortest paths.",
+        "(B) OSPF uses Dijkstra’s shortest path algorithm to implement least-cost path routing.",
+        "(C) OSPF is used as an inter-domain routing protocol.",
+        "(D) OSPF implements hierarchical routing."
+      ],
+      "answer": [
+        "A",
+        "C"
+      ],
+      "explanation": "OSPF uses Dijkstra and is an intra-domain link-state routing protocol."
+    }
+  ],
+  "Algorithms / Heap Priority Queue": [
+    {
+      "subtopic": "Max-Heap Priority Queue",
+      "type": "MCQ",
+      "marks": 2,
+      "concept": "Worst-case complexity of Extract-Max and Insert in a max-heap.",
+      "trap": "Assuming Extract-Max is constant because the maximum is at the root.",
+      "question": "Let A be a priority queue for maintaining a set of elements. Suppose A is implemented using a max-heap data structure. The operation Extract-Max(A) extracts and deletes the maximum element from A. The operation Insert(A,key) inserts a new element key in A. The properties of a max-heap are preserved at the end of each of these operations. When A contains n elements, which one of the following statements about the worst case running time of these two operations is TRUE?",
+      "options": [
+        "(A) Both Extract-Max(A) and Insert(A,key) run in O(1).",
+        "(B) Both Extract-Max(A) and Insert(A,key) run in O(log(n)).",
+        "(C) Extract-Max(A) runs in O(1) whereas Insert(A,key) runs in O(n).",
+        "(D) Extract-Max(A) runs in O(1) whereas Insert(A,key) runs in O(log(n))."
+      ],
+      "answer": "B",
+      "explanation": "Both heap deletion and insertion can traverse a root-to-leaf path of height O(log n)."
+    }
+  ],
+  "Engineering Mathematics / Chromatic Number": [
+    {
+      "subtopic": "Graph Coloring",
+      "type": "MSQ",
+      "marks": 1,
+      "concept": "Bounds implied by chromatic number.",
+      "trap": "Assuming a k-chromatic graph must contain a k-clique.",
+      "question": "The chromatic number of a graph is the minimum number of colours used in a proper colouring of the graph. Let G be any graph with n vertices and chromatic number k. Which of the following statements is/are always TRUE?",
+      "options": [
+        "(A) G contains a complete subgraph with k vertices",
+        "(B) G contains an independent set of size at least n/k",
+        "(C) G contains at least k(k − 1)/2 edges",
+        "(D) G contains a vertex of degree at least k"
+      ],
+      "answer": [
+        "B",
+        "C"
+      ],
+      "explanation": "A k-colouring gives k independent colour classes, so one has size at least n/k. A k-chromatic graph contains a k-critical subgraph with at least k(k−1)/2 edges."
+    }
+  ],
+  "Engineering Mathematics / Adjacency Matrix": [
+    {
+      "subtopic": "Eigenvalue Sum",
+      "type": "NAT",
+      "marks": 1,
+      "concept": "Sum of eigenvalues equals the trace.",
+      "trap": "Trying to compute all eigenvalues explicitly.",
+      "question": "Let A be the adjacency matrix of the graph with vertices {1, 2, 3, 4, 5}. Let λ1, λ2, λ3, λ4, and λ5 be the five eigenvalues of A. Note that these eigenvalues need not be distinct. The value of λ1 + λ2 + λ3 + λ4 + λ5 = .",
+      "options": null,
+      "answer": 0.0,
+      "explanation": "The sum of eigenvalues equals trace(A), and a simple graph adjacency matrix has zero diagonal."
+    }
+  ],
+  "Computer Organization and Architecture / IEEE 754": [
+    {
+      "subtopic": "Floating Point Multiplication",
+      "type": "MCQ",
+      "marks": 2,
+      "concept": "IEEE-754 single-precision representation and hexadecimal decoding.",
+      "trap": "Ignoring the sign bit or exponent bias when interpreting hexadecimal values.",
+      "question": "Consider the IEEE-754 single precision floating point numbers P=0xC1800000 and Q=0x3F5C2EF4. Which one of the following corresponds to the product of these numbers (i.e., P × Q), represented in the IEEE-754 single precision format?",
+      "options": [
+        "(A) 0x404C2EF4",
+        "(B) 0x405C2EF4",
+        "(C) 0xC15C2EF4",
+        "(D) 0xC14C2EF4"
+      ],
+      "answer": "D",
+      "explanation": "P is negative and approximately −16, while Q is a positive number below 1. Decoding and multiplying the values gives the negative result represented by 0xC14C2EF4."
+    }
+  ],
+  "Computer Networks / DNS": [
+    {
+      "subtopic": "DNS Resolution and HTTP",
       "type": "MSQ",
       "marks": 2,
-      "concept": "Open addressing requires a probe sequence and degrades as the load factor approaches 1.",
-      "trap": "Including chaining as a form of open addressing, or assuming deletion is trivial in open addressing.",
-      "question": "Which of the following are TRUE about open addressing in hash tables? (Select all that apply.)",
+      "concept": "RTT accounting across iterative DNS resolution and HTTP object retrieval.",
+      "trap": "Forgetting that each non-persistent TCP connection needs a handshake before the request.",
+      "question": "Suppose in a web browser, you click on the www.gate-2023.in URL. The browser cache is empty. The IP address for this URL is not cached in your local host, so a DNS lookup is triggered (by the local DNS server deployed on your local host) over the 3-tier DNS hierarchy in an iterative mode. No resource records are cached anywhere across all DNS servers. Let RTT denote the round trip time between your local host and DNS servers in the DNS hierarchy. The round trip time between the local host and the web server hosting www.gate-2023.in is also equal to RTT. The HTML file associated with the URL is small enough to have negligible transmission time and negligible rendering time by your web browser, which references 10 equally small objects on the same web server. Which of the following statements is/are CORRECT about the minimum elapsed time between clicking on the URL and your browser fully rendering it?",
       "options": [
-        "All elements are stored within the table itself; no external lists are used",
-        "The load factor must be strictly less than 1 for insertions to be guaranteed a free slot",
-        "Standard deletion requires a tombstone marker to preserve probe sequences",
-        "Linear probing is the only collision resolution strategy under open addressing"
+        "(A) 7 RTTs, in case of non-persistent HTTP with 5 parallel TCP connections.",
+        "(B) 5 RTTs, in case of persistent HTTP with pipelining.",
+        "(C) 9 RTTs, in case of non-persistent HTTP with 5 parallel TCP connections.",
+        "(D) 6 RTTs, in case of persistent HTTP with pipelining."
       ],
-      "answer": ["A", "B", "C"],
-      "explanation": "A, B, and C are true. D is false: linear, quadratic, and double hashing are all valid open addressing strategies."
-    },
+      "answer": [
+        "A",
+        "B"
+      ],
+      "explanation": "Iterative DNS contributes three RTTs. The initial TCP connection and HTML transfer contribute additional RTTs; parallel non-persistent connections and persistent pipelining produce the listed valid totals."
+    }
+  ],
+  "Engineering Mathematics / Event Independence": [
     {
-      "subtopic": "Hashing",
-      "type": "NAT",
+      "subtopic": "Independent Events",
+      "type": "MSQ",
+      "marks": 1,
+      "concept": "Independence of events generated by separate fair-coin tosses.",
+      "trap": "Assuming event A being a subset of B automatically makes A and B independent.",
+      "question": "Consider a random experiment where two fair coins are tossed. Let A be the event that denotes HEAD on both the throws, B be the event that denotes HEAD on the first throw, and C be the event that denotes HEAD on the second throw. Which of the following statements is/are TRUE?",
+      "options": [
+        "(A) A and B are independent.",
+        "(B) A and C are independent.",
+        "(C) B and C are independent.",
+        "(D) Prob(B|C) = Prob(B)"
+      ],
+      "answer": [
+        "C",
+        "D"
+      ],
+      "explanation": "B and C concern separate tosses and are independent. Since P(B)=1/2 and P(B|C)=1/2, D is also true. A is not independent of B or C because A requires both."
+    }
+  ],
+  "Computer Networks / IP Fragmentation": [
+    {
+      "subtopic": "IPv4 Fragmentation",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Fragmentation and reassembly locations in IPv4.",
+      "trap": "Assuming intermediate routers reassemble fragments.",
+      "question": "Which of the following statements is/are TRUE about IPv4 fragmentation?",
+      "options": [
+        "(A) The fragmentation of an IP datagram is performed only at the source of the datagram",
+        "(B) The fragmentation of an IP datagram is performed at any IP router which finds that the size of the datagram to be transmitted exceeds the MTU",
+        "(C) The reassembly of fragments is performed only at the destination of the datagram",
+        "(D) The reassembly of fragments is performed at all intermediate routers along the path from the source to the destination"
+      ],
+      "answer": [
+        "B",
+        "C"
+      ],
+      "explanation": "IPv4 routers may fragment packets that exceed the outgoing MTU; reassembly is performed at the destination."
+    }
+  ],
+  "Compiler Design / LR Parsing": [
+    {
+      "subtopic": "Deterministic Context-Free Languages",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Parsing power of LR(1).",
+      "trap": "Treating LALR(1) and LR(1) as having identical conflict properties.",
+      "question": "Which one of the following statements is TRUE?",
+      "options": [
+        "(A) The LALR(1) parser for a grammar G cannot have reduce-reduce conflict if the LR(1) parser for G does not have reduce-reduce conflict.",
+        "(B) Symbol table is accessed only during the lexical analysis phase.",
+        "(C) Data flow analysis is necessary for run-time memory management.",
+        "(D) LR(1) parsing is sufficient for deterministic context-free languages."
+      ],
+      "answer": "D",
+      "explanation": "Every deterministic context-free language can be recognized by an LR(1) parser."
+    }
+  ],
+  "Databases / BCNF": [
+    {
+      "subtopic": "BCNF and Decomposition",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "BCNF definition and dependency preservation.",
+      "trap": "Assuming BCNF decomposition always preserves every functional dependency.",
+      "question": "In a relational data model, which one of the following statements is TRUE?",
+      "options": [
+        "(A) A relation with only two attributes is always in BCNF.",
+        "(B) If all attributes of a relation are prime attributes, then the relation is in BCNF.",
+        "(C) Every relation has at least one non-prime attribute.",
+        "(D) BCNF decompositions preserve functional dependencies."
+      ],
+      "answer": "A",
+      "explanation": "For a two-attribute relation, every non-trivial FD has a determinant that is a superkey, so the relation satisfies BCNF."
+    }
+  ],
+  "Programming and Data Structures / Linked List": [
+    {
+      "subtopic": "In-place List Reversal",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Optimal time and space for reversing a singly linked list.",
+      "trap": "Believing O(1) auxiliary space makes reversal impossible.",
+      "question": "Consider the problem of reversing a singly linked list. Which one of the following statements is TRUE about the time complexity of algorithms that solve the above problem in O(1) space?",
+      "options": [
+        "(A) The best algorithm for the problem takes θ(n) time in the worst case.",
+        "(B) The best algorithm for the problem takes θ(n log n) time in the worst case.",
+        "(C) The best algorithm for the problem takes θ(n^2) time in the worst case.",
+        "(D) It is not possible to reverse a singly linked list in O(1) space."
+      ],
+      "answer": "A",
+      "explanation": "The standard iterative three-pointer reversal takes linear time and constant auxiliary space."
+    }
+  ],
+  "Operating System / DMA": [
+    {
+      "subtopic": "DMA Throughput",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Best mechanism for bulk transfer from disk to memory.",
+      "trap": "Confusing CPU involvement with throughput.",
+      "question": "Which one of the following facilitates transfer of bulk data from hard disk to main memory with the highest throughput?",
+      "options": [
+        "(A) DMA based I/O transfer",
+        "(B) Interrupt driven I/O transfer",
+        "(C) Polling based I/O transfer",
+        "(D) Programmed I/O transfer"
+      ],
+      "answer": "A",
+      "explanation": "DMA transfers bulk data with minimal CPU involvement and is therefore the highest-throughput choice among the listed mechanisms."
+    }
+  ],
+  "Operating System / Semaphores": [
+    {
+      "subtopic": "Semaphore Ordering",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Using semaphore initializations to enforce a fixed print order.",
+      "trap": "Starting more than one thread without the required semaphore token.",
+      "question": "Consider the following threads, T1, T2, and T3 executing on a single processor, synchronized using three binary semaphore variables, S1, S2, and S3, operated upon using standard wait() and signal(). The threads can be context switched in any order and at any time. Which initialization of the semaphores would print the sequence BCABCABCA….?",
+      "options": [
+        "(A) S1 = 1; S2 = 1; S3 = 1",
+        "(B) S1 = 1; S2 = 1; S3 = 0",
+        "(C) S1 = 1; S2 = 0; S3 = 0",
+        "(D) S1 = 0; S2 = 1; S3 = 1"
+      ],
+      "answer": "C",
+      "explanation": "The first printable thread must be the one waiting on S1, and the subsequent signals must create the B→C→A cycle."
+    }
+  ],
+  "Programming and Data Structures / C Pointer Arithmetic": [
+    {
+      "subtopic": "Pointer Arithmetic",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Pointer differences versus differences between pointed-to values.",
+      "trap": "Confusing q-p with *q-*p.",
+      "question": "What is printed by the following ANSI C program?\n#include<stdio.h>\nint main(int argc, char *argv[])\n{\n double a[2]={20.0, 25.0}, *p, *q;\n p = a;\n q = p + 1;\n printf(\"%d,%d\", (int)(q – p), (int)(*q – *p));\n return 0;}\n",
+      "options": [
+        "(A) 4,8",
+        "(B) 1,5",
+        "(C) 8,5",
+        "(D) 1,8"
+      ],
+      "answer": "B",
+      "explanation": "q−p is one array element, while *q−*p is 25−20=5."
+    }
+  ],
+  "Computer Networks / CIDR": [
+    {
+      "subtopic": "CIDR Prefix",
+      "type": "MCQ",
       "marks": 2,
-      "concept": "Universal hashing guarantees that for any key, the probability of collision with another specific key is at most 1/m, where m is the table size.",
-      "trap": "Misreading the probability bound or mixing it with the probability of a collision under a fixed hash function.",
-      "question": "A hash table uses a universal hash family with m = 1000 slots. What is the maximum probability that two distinct keys collide under a randomly chosen hash function from the family? Express as a decimal to 3 decimal places.",
-      "options": null,
-      "answer": 0.001,
-      "explanation": "By definition of universal hashing, for any pair of distinct keys x and y, Pr[h(x) = h(y)] <= 1/m = 1/1000 = 0.001."
+      "concept": "Finding the exact CIDR block for a contiguous address range.",
+      "trap": "Choosing a prefix that includes addresses outside the required range.",
+      "question": "Which one of the following CIDR prefixes exactly represents the range of IP addresses 10.12.2.0 to 10.12.3.255?",
+      "options": [
+        "(A) 10.12.2.0/23",
+        "(B) 10.12.2.0/24",
+        "(C) 10.12.0.0/22",
+        "(D) 10.12.2.0/22"
+      ],
+      "answer": "A",
+      "explanation": "The range contains 512 addresses and aligns exactly with a /23 block starting at 10.12.2.0."
+    }
+  ],
+  "Theory of Computation / CFL": [
+    {
+      "subtopic": "Context-Free Grammar",
+      "type": "MCQ",
+      "marks": 2,
+      "concept": "Determining the language generated by a recursive CFG.",
+      "trap": "Assuming recursion forces equal counts of terminals.",
+      "question": "Consider the context-free grammar G below\nS → aSb | X\nX → aX | Xb | a | b,\nwhere S and X are non-terminals, and a and b are terminal symbols. The starting non-terminal is S. Which one of the following statements is CORRECT?",
+      "options": [
+        "(A) The language generated by G is (a + b)∗",
+        "(B) The language generated by G is a∗(a + b)b∗",
+        "(C) The language generated by G is a∗b∗(a + b)",
+        "(D) The language generated by G is not a regular language"
+      ],
+      "answer": "B",
+      "explanation": "X generates a nonempty sequence of a's followed by b's, and surrounding S recursion preserves the regular form a*(a+b)b*."
+    }
+  ],
+  "Databases / Relational Algebra": [
+    {
+      "subtopic": "Relational Algebra Division",
+      "type": "MSQ",
+      "marks": 1,
+      "concept": "Using relational division to find entities related to all items.",
+      "trap": "Using a join alone for an 'all' query.",
+      "question": "Consider the following three relations in a relational database.\nEmployee eId Name (eId, Name), Brand bId bName (bId, bName), Own eId bId (eId, bId)\nWhich of the following relational algebra expressions return the set of eIds who own all the brands?",
+      "options": [
+        "(A) πeId(πeId,bId(Own) / πbId(Brand))",
+        "(B) ...",
+        "(C) πeId(πeId,bId(Own) / πbId(Own))",
+        "(D) ..."
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Relational division by the set of all brand identifiers expresses the universal condition 'owns every brand'."
+    }
+  ],
+  "Algorithms / Hashing": [
+    {
+      "subtopic": "Expected Chain Length",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Expected number of keys per hash-table slot under simple uniform hashing.",
+      "trap": "Doubling the expected occupancy because odd and even keys use different hash functions.",
+      "question": "Suppose we are given n keys, m hash table slots, and two simple uniform hash functions h1 and h2. Further suppose our hashing scheme uses h1 for the odd keys and h2 for the even keys. What is the expected number of keys in a slot?",
+      "options": [
+        "(A) m/n",
+        "(B) n/m",
+        "(C) 2n/m",
+        "(D) n^2/m"
+      ],
+      "answer": "B",
+      "explanation": "Each key independently contributes expected probability 1/m to any given slot, regardless of whether h1 or h2 is used. Across n keys the expected occupancy is n/m."
+    }
+  ],
+  "Databases / Transaction Serialization": [
+    {
+      "subtopic": "Conflict Serializability",
+      "type": "MCQ",
+      "marks": 2,
+      "concept": "Finding a serial schedule conflict-equivalent to a given schedule.",
+      "trap": "Comparing only read-read pairs, which create no conflict, instead of read-write/write-write pairs.",
+      "question": "Consider the following read-write schedule S over three transactions T1, T2, and T3, where the subscripts in the schedule indicate transaction IDs:\nS: r1(z); w1(z); r2(x); r3(y); w3(y); r2(y); w2(x); w2(y);\nWhich of the following transaction schedules is/are conflict equivalent to S ?",
+      "options": [
+        "(A) T1T2T3",
+        "(B) T1T3T2",
+        "(C) T3T2T1",
+        "(D) T3T1T2"
+      ],
+      "answer": [
+        "A",
+        "D"
+      ],
+      "explanation": "The only nontrivial precedence constraints arise from conflicts on y, requiring T3 before T2, while T1 is independent of those conflicts."
+    }
+  ],
+  "Computer Organization and Architecture / Direct Memory Interface": [
+    {
+      "subtopic": "Memory Interface Decoders",
+      "type": "MCQ",
+      "marks": 2,
+      "concept": "Using decoder outputs to select one of four 1 KB memory blocks.",
+      "trap": "Confusing decoder output count with multiplexer input count.",
+      "question": "A 4 kilobyte (KB) byte-addressable memory is realized using four 1 KB memory blocks. Two input address lines (IA4 and IA3) are connected to the chip select (CS) port of these memory blocks through a decoder as shown in the figure. The remaining ten input address lines from IA11–IA0 are connected to the address port of these blocks. The chip select (CS) is active high. The input memory addresses (IA11–IA0), in decimal, for the starting locations (Addr=0) of each block (indicated as X1, X2, X3, X4 in the figure) are among the options given below. Which one of the following options is CORRECT?",
+      "options": [
+        "(A) (0, 1, 2, 3)",
+        "(B) (0, 1024, 2048, 3072)",
+        "(C) (0, 8, 16, 24)",
+        "(D) (0, 0, 0, 0)"
+      ],
+      "answer": "B",
+      "explanation": "Each block is 1 KB, so the four blocks begin at byte addresses 0, 1024, 2048, and 3072."
+    }
+  ],
+  "Programming and Data Structures / C Pointer Aliasing": [
+    {
+      "subtopic": "Pointer Assignment",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "Effect of pointer assignment on the variable pointed to.",
+      "trap": "Confusing the pointer variable with the pointee.",
+      "question": "What is printed by the following ANSI C program?\n#include<stdio.h>\nint main(int argc, char *argv[])\n{\n int x = 1, z[2] = {10, 11};\n int *p = NULL;\n p = &x;\n *p = 10;\n p = &z[1];\n *(&z[0] + 1) += 3;\n printf(\"%d, %d, %d\\n\", x, z[0], z[1]);\n return 0;\n}",
+      "options": [
+        "(A) 1, 10, 11",
+        "(B) 1, 10, 14",
+        "(C) 10, 14, 11",
+        "(D) 10, 10, 14"
+      ],
+      "answer": "D",
+      "explanation": "*p = 10 changes x to 10. &z[0]+1 points to z[1], so z[1] becomes 14."
+    }
+  ],
+  "Operating System / File Allocation": [
+    {
+      "subtopic": "DMA",
+      "type": "MCQ",
+      "marks": 1,
+      "concept": "High-throughput transfer from secondary storage to memory.",
+      "trap": "Assuming programmed I/O is fastest because it gives the CPU direct control.",
+      "question": "Which one of the following facilitates transfer of bulk data from hard disk to main memory with the highest throughput?",
+      "options": [
+        "(A) DMA based I/O transfer",
+        "(B) Interrupt driven I/O transfer",
+        "(C) Polling based I/O transfer",
+        "(D) Programmed I/O transfer"
+      ],
+      "answer": "A",
+      "explanation": "DMA performs bulk transfers directly between the device and memory with minimal processor intervention."
     }
   ]
 }

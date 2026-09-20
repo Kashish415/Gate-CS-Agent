@@ -1,52 +1,94 @@
 {
-  "Operating Systems": [
-    "Process Synchronization",
-    "CPU Scheduling",
-    "Deadlocks",
-    "Virtual Memory",
-    "File Systems"
+  "Engineering Mathematics": [
+    "Propositional and First Order Logic",
+    "Sets, Relations, Functions, Partial Orders and Lattices",
+    "Monoids and Groups",
+    "Graphs: Connectivity, Matching, Colouring",
+    "Combinatorics: Counting, Recurrence Relations, Generating Functions",
+    "Matrices, Determinants, System of Linear Equations",
+    "Eigenvalues and Eigenvectors, LU Decomposition",
+    "Limits, Continuity and Differentiability",
+    "Maxima and Minima, Mean Value Theorem, Integration",
+    "Random Variables and Standard Distributions",
+    "Mean, Median, Mode, Standard Deviation",
+    "Conditional Probability and Bayes Theorem"
+  ],
+  "Digital Logic": [
+    "Boolean Algebra",
+    "Combinational Circuits",
+    "Sequential Circuits",
+    "Minimization",
+    "Number Representations and Computer Arithmetic"
+  ],
+  "Computer Organization and Architecture": [
+    "Machine Instructions and Addressing Modes",
+    "ALU, Data-path and Control Unit",
+    "Instruction Pipelining and Pipeline Hazards",
+    "Memory Hierarchy: Cache, Main Memory, Secondary Storage",
+    "I/O Interface: Interrupt and DMA Mode"
+  ],
+  "Programming and Data Structures": [
+    "Programming in C",
+    "Recursion",
+    "Arrays, Stacks, Queues",
+    "Linked Lists",
+    "Trees and Binary Search Trees",
+    "Binary Heaps",
+    "Graphs"
   ],
   "Algorithms": [
-    "Divide and Conquer",
-    "Greedy",
+    "Searching, Sorting, Hashing",
+    "Asymptotic Worst Case Time and Space Complexity",
+    "Greedy Algorithm Design",
     "Dynamic Programming",
-    "Graph Algorithms",
-    "NP-Completeness"
-  ],
-  "DBMS": [
-    "Relational Algebra",
-    "Normalization",
-    "Transactions and Concurrency",
-    "Indexing and Hashing"
-  ],
-  "Computer Networks": [
-    "IP Addressing and Subnetting",
-    "TCP and UDP",
-    "Routing Protocols",
-    "Application Layer"
-  ],
-  "Data Structures": [
-    "Trees and BST",
-    "Hashing",
-    "Heaps",
-    "Linked Lists"
+    "Divide and Conquer",
+    "Graph Traversals",
+    "Minimum Spanning Trees",
+    "Shortest Paths"
   ],
   "Theory of Computation": [
-    "Finite Automata",
-    "Pumping Lemma",
-    "Decidability",
-    "Complexity Classes"
+    "Regular Expressions and Finite Automata",
+    "Context-Free Grammars and Pushdown Automata",
+    "Regular and Context-Free Languages, Pumping Lemma",
+    "Turing Machines and Undecidability"
   ],
-  "Discrete Mathematics": [
-    "Sets and Relations",
-    "Graph Theory",
-    "Combinatorics",
-    "Propositional Logic"
+  "Compiler Design": [
+    "Lexical Analysis",
+    "Parsing",
+    "Syntax-Directed Translation",
+    "Runtime Environments",
+    "Intermediate Code Generation",
+    "Local Optimisation",
+    "Data Flow Analyses: Constant Propagation, Liveness, Common Subexpression Elimination"
   ],
-  "Computer Organization": [
-    "Pipelining",
-    "Cache Memory",
-    "Addressing Modes",
-    "I/O and Interrupts"
+  "Operating System": [
+    "System Calls, Processes, Threads",
+    "Inter-Process Communication",
+    "Concurrency and Synchronization",
+    "Deadlock",
+    "CPU Scheduling",
+    "I/O Scheduling",
+    "Memory Management and Virtual Memory",
+    "File Systems"
+  ],
+  "Databases": [
+    "ER Model",
+    "Relational Algebra and Tuple Calculus",
+    "SQL",
+    "Integrity Constraints",
+    "Normal Forms",
+    "File Organization and Indexing (B and B+ Trees)",
+    "Transactions and Concurrency Control"
+  ],
+  "Computer Networks": [
+    "Layering: OSI and TCP/IP Protocol Stacks",
+    "Packet, Circuit and Virtual Circuit Switching",
+    "Data Link Layer: Framing, Error Detection, Medium Access Control",
+    "Ethernet Bridging",
+    "Routing Protocols: Shortest Path, Flooding, Distance Vector, Link State",
+    "Fragmentation and IP Addressing, IPv4, CIDR",
+    "IP Support Protocols: ARP, DHCP, ICMP, NAT",
+    "Transport Layer: Flow Control, Congestion Control, UDP, TCP, Sockets",
+    "Application Layer: DNS, SMTP, HTTP, FTP, Email"
   ]
 }
