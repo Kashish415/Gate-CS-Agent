@@ -1,0 +1,376 @@
+[
+    {
+        "subject": "Computer Networks",
+        "subtopic": "HTTP, TCP and DNS",
+        "question_type": "MCQ",
+        "question": "A user starts browsing a webpage hosted at a remote server. The browser opens a single TCP connection to fetch the entire webpage from the server. The webpage consists of a top-level index page with multiple embedded image objects. Assume that all caches (e.g., DNS cache, browser cache) are all initially empty. The following packets leave the user’s computer in some order.\n(i) HTTP GET request for the index page\n(ii) DNS request to resolve the web server’s name to its IP address\n(iii) HTTP GET request for an image object\n(iv) TCP SYN to open a connection to the web server\nWhich one of the following is the CORRECT chronological order (earliest in time to latest) of the packets leaving the computer ?",
+        "options": [
+            "(iv), (ii), (iii), (i)",
+            "(ii), (iv), (iii), (i)",
+            "(ii), (iv), (i), (iii)",
+            "(iv), (ii), (i), (iii)"
+        ],
+        "answer": "C"
+    },
+    {
+        "subject": "Algorithms",
+        "subtopic": "Asymptotic Analysis",
+        "question_type": "MCQ",
+        "question": "Given an integer array of size N, we want to check if the array is sorted (in either ascending or descending order). An algorithm solves this problem by making a single pass through the array and comparing each element of the array only with its adjacent elements. The worst-case time complexity of this algorithm is",
+        "options": [
+            "both Ο(N) and Ω(N)",
+            "Ο(N) but not Ω(N)",
+            "Ω(N) but not Ο(N)",
+            "neither Ο(N) nor Ω(N)"
+        ],
+        "answer": "A"
+    },
+    {
+        "subject": "Programming and Data Structures",
+        "subtopic": "C Programming: Loops",
+        "question_type": "MCQ",
+        "question": "Consider the following C program:\n#include <stdio.h>\nint main(){\n int a = 6;\n int b = 0;\n while(a < 10) {\n a = a / 12 + 1;\n a += b;}\n printf(”%d”, a);\n return 0;}\nWhich one of the following statements is CORRECT?",
+        "options": [
+            "The program prints 9 as output",
+            "The program prints 10 as output",
+            "The program gets stuck in an infinite loop",
+            "The program prints 6 as output"
+        ],
+        "answer": "C"
+    },
+    {
+        "subject": "Programming and Data Structures",
+        "subtopic": "Recursion",
+        "question_type": "MCQ",
+        "question": "Consider the following C program:\n#include <stdio.h>\nvoid fX();\nint main(){\n fX();\n return 0;}\n void fX(){\n char a;\n if((a=getchar()) != ’\\n’)\n fX();\n if(a != ’\\n’)\n putchar(a);}\nAssume that the input to the program from the command line is 1234 followed by a newline character. Which one of the following statements is CORRECT?",
+        "options": [
+            "The program will not terminate",
+            "The program will terminate with no output",
+            "The program will terminate with 4321 as output",
+            "The program will terminate with 1234 as output"
+        ],
+        "answer": "C"
+    },
+    {
+        "subject": "Databases",
+        "subtopic": "B+ Trees",
+        "question_type": "MCQ",
+        "question": "In a B+ tree, the requirement of at least half-full (50%) node occupancy is relaxed for which one of the following cases?",
+        "options": [
+            "Only the root node",
+            "All leaf nodes",
+            "All internal nodes",
+            "Only the leftmost leaf node"
+        ],
+        "answer": "A"
+    },
+    {
+        "subject": "Compiler Design",
+        "subtopic": "Syntax-Directed Definitions",
+        "question_type": "MCQ",
+        "question": "Consider the following syntax-directed definition (SDD).\nS → DHTU { S.val = D.val + H.val + T.val + U.val; }\nD → \"M\"D1 { D.val = 5 + D1.val; }\nD → ϵ { D.val = −5; }\nH → \"L\"H1 { H.val = 5 ∗ 10 + H1.val; }\nH → ϵ { H.val = −10; }\nT → \"C\"T1 { T.val = 5 ∗ 100 + T1.val; }\nT → ϵ { T.val = −5; }\nU → \"K\" { U.val = 5; }\nGiven \"MMLK\" as the input, which one of the following options is the CORRECT value computed by the SDD (in the attribute S.val)?",
+        "options": [
+            "45",
+            "50",
+            "55",
+            "65"
+        ],
+        "answer": "A"
+    },
+    {
+        "subject": "Programming and Data Structures",
+        "subtopic": "Binary Min-Heap",
+        "question_type": "MCQ",
+        "question": "Consider a binary min-heap containing 105 distinct elements. Let k be the index (in the underlying array) of the maximum element stored in the heap. The number of possible values of k is",
+        "options": [
+            "53",
+            "52",
+            "27",
+            "1"
+        ],
+        "answer": "A"
+    },
+    {
+        "subject": "Computer Organization and Architecture",
+        "subtopic": "DMA",
+        "question_type": "MCQ",
+        "question": "Consider a computer with a 4 MHz processor. Its DMA controller can transfer 8 bytes in 1 cycle from a device to main memory through cycle stealing at regular intervals. Which one of the following is the data transfer rate (in bits per second) of the DMA controller if 1% of the processor cycles are used for DMA?",
+        "options": [
+            "2,56,000",
+            "3,200",
+            "25,60,000",
+            "32,000"
+        ],
+        "answer": "C"
+    },
+    {
+        "subject": "Engineering Mathematics",
+        "subtopic": "Propositional Logic",
+        "question_type": "MCQ",
+        "question": "Let p and q be the following propositions:\np: Fail grade can be given.\nq: Student scores more than 50% marks.\nConsider the statement: “Fail grade cannot be given when student scores more than 50% marks.”\nWhich one of the following is the CORRECT representation of the above statement in propositional logic?",
+        "options": [
+            "q → ¬p",
+            "q → p",
+            "p → q",
+            "¬p → q"
+        ],
+        "answer": "A"
+    },
+    {
+        "subject": "Operating System",
+        "subtopic": "CPU Scheduling",
+        "question_type": "MCQ",
+        "question": "Consider a single processor system with four processes A, B, C, and D, represented as given below, where for each process the first value is its arrival time, and the second value is its CPU burst time.\nA (0, 10), B (2, 6), C (4, 3), and D (6, 7).\nWhich one of the following options gives the average waiting times when preemptive Shortest Remaining Time First (SRTF) and Non-Preemptive Shortest Job First (NP-SJF) CPU scheduling algorithms are applied to the processes?",
+        "options": [
+            "SRTF = 6, NP-SJF = 7",
+            "SRTF = 6, NP-SJF = 7.5",
+            "SRTF = 7, NP-SJF = 7.5",
+            "SRTF = 7, NP-SJF = 8.5"
+        ],
+        "answer": "B"
+    },
+    {
+        "subject": "Databases",
+        "subtopic": "Normalization (1NF)",
+        "question_type": "MSQ",
+        "question": "Which of the following statements about a relation R in first normal form (1NF) is/are TRUE ?",
+        "options": [
+            "R can have a multi-attribute key",
+            "R cannot have a foreign key",
+            "R cannot have a composite attribute",
+            "R cannot have more than one candidate key"
+        ],
+        "answer": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "subject": "Operating System",
+        "subtopic": "Process States",
+        "question_type": "MSQ",
+        "question": "Which of the following process state transitions is/are NOT possible?",
+        "options": [
+            "Running to Ready",
+            "Waiting to Running",
+            "Ready to Waiting",
+            "Running to Terminated"
+        ],
+        "answer": [
+            "B",
+            "C"
+        ]
+    },
+    {
+        "subject": "Compiler Design",
+        "subtopic": "Parsing",
+        "question_type": "MSQ",
+        "question": "Which of the following is/are Bottom-Up Parser(s)?",
+        "options": [
+            "Shift-reduce Parser",
+            "Predictive Parser",
+            "LL(1) Parser",
+            "LR Parser"
+        ],
+        "answer": [
+            "A",
+            "D"
+        ]
+    },
+    {
+        "subject": "Computer Networks",
+        "subtopic": "Network Address Translation",
+        "question_type": "MSQ",
+        "question": "Which of the following fields is/are modified in the IP header of a packet going out of a network address translation (NAT) device from an internal network to an external network?",
+        "options": [
+            "Source IP",
+            "Destination IP",
+            "Header Checksum",
+            "Total Length"
+        ],
+        "answer": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "subject": "Digital Logic",
+        "subtopic": "Boolean Functions",
+        "question_type": "MSQ",
+        "question": "Consider a Boolean expression given by F(X, Y, Z) = ∑(3,5,6,7).\nWhich of the following statements is/are CORRECT?",
+        "options": [
+            "F(X, Y, Z) = Π(0,1,2,4)",
+            "F(X, Y, Z) = XY + YZ + XZ",
+            "F(X, Y, Z) is independent of input Y",
+            "F(X, Y, Z) is independent of input X"
+        ],
+        "answer": [
+            "A",
+            "B"
+        ]
+    },
+    {
+        "subject": "Computer Organization and Architecture",
+        "subtopic": "Cache Memory",
+        "question_type": "MSQ",
+        "question": "Consider two set-associative cache memory architectures: WBC, which uses the write back policy, and WTC, which uses the write through policy. Both of them use the LRU (Least Recently Used) block replacement policy. The cache memory is connected to the main memory. Which of the following statements is/are TRUE?",
+        "options": [
+            "A read miss in WBC never evicts a dirty block",
+            "A read miss in WTC never triggers a write back operation of a cache block to main memory",
+            "A write hit in WBC can modify the value of the dirty bit of a cache block",
+            "A write miss in WTC always writes the victim cache block to main memory before loading the missed block to the cache"
+        ],
+        "answer": [
+            "B",
+            "C"
+        ]
+    },
+    {
+        "subject": "Operating System",
+        "subtopic": "Memory Management Unit",
+        "question_type": "MSQ",
+        "question": "Which of the following tasks is/are the responsibility/responsibilities of the memory management unit (MMU) in a system with paging-based memory management?",
+        "options": [
+            "Allocate a new page table for a newly created process",
+            "Translate a virtual address to a physical address using the page table",
+            "Raise a trap when a virtual address is not found in the page table",
+            "Raise a trap when a process tries to write to a page marked with read-only permission in the page table"
+        ],
+        "answer": [
+            "B",
+            "C",
+            "D"
+        ]
+    },
+    {
+        "subject": "Databases",
+        "subtopic": "Two-Phase Locking",
+        "question_type": "MSQ",
+        "question": "Which of the following statements about the Two Phase Locking (2PL) protocol is/are TRUE?",
+        "options": [
+            "2PL permits only serializable schedules",
+            "With 2PL, a transaction always locks the data item being read or written just before every operation and always releases the lock just after the operation",
+            "With 2PL, once a lock is released on any data item inside a transaction, no more locks on any data item can be obtained inside that transaction",
+            "A deadlock is possible with 2PL"
+        ],
+        "answer": [
+            "A",
+            "C",
+            "D"
+        ]
+    },
+    {
+        "subject": "Programming and Data Structures",
+        "subtopic": "C Pointers and Strings",
+        "question_type": "MSQ",
+        "question": "Consider the following C function definition.\nint fX(char *a){\n char *b = a;\n while(*b)\n b++;\n return b - a;}\nWhich of the following statements is/are TRUE?",
+        "options": [
+            "The function call fX(”abcd”) will always return a value",
+            "Assuming a character array c is declared as char c[] = ”abcd” in main(), the function call fX(c) will always return a value",
+            "The code of the function will not compile",
+            "Assuming a character pointer c is declared as char *c = ”abcd” in main(), the function call fX(c) will always return a value"
+        ],
+        "answer": [
+            "A",
+            "B",
+            "D"
+        ]
+    },
+    {
+        "subject": "Computer Organization and Architecture",
+        "subtopic": "Number Systems",
+        "question_type": "MSQ",
+        "question": "Which of the following is/are EQUAL to 224 in radix-5 (i.e., base-5) notation?",
+        "options": [
+            "64 in radix-10",
+            "100 in radix-8",
+            "50 in radix-16",
+            "121 in radix-7"
+        ],
+        "answer": [
+            "A",
+            "B",
+            "D"
+        ]
+    },
+    {
+        "subject": "Engineering Mathematics",
+        "subtopic": "Graph Theory",
+        "question_type": "NAT",
+        "question": "The number of spanning trees in a complete graph of 4 vertices labelled A, B, C, and D is _________",
+        "options": null,
+        "answer": 16.0
+    },
+    {
+        "subject": "Computer Organization and Architecture",
+        "subtopic": "Secondary Storage",
+        "question_type": "NAT",
+        "question": "Consider a 512 GB hard disk with 32 storage surfaces. There are 4096 sectors per track and each sector holds 1024 bytes of data. The number of cylinders in the hard disk is _________",
+        "options": null,
+        "answer": 4096.0
+    },
+    {
+        "subject": "Operating System",
+        "subtopic": "Process Creation (fork/wait)",
+        "question_type": "NAT",
+        "question": "Consider the following code snippet using the fork() and wait() system calls. Assume that the code compiles and runs correctly, and that the system calls run successfully without any errors.\nint x = 3;\nwhile(x > 0) {\n fork();\n printf(\"hello\");\n wait(NULL);\n x--;\n}\nThe total number of times the printf statement is executed is _______",
+        "options": null,
+        "answer": 14.0
+    },
+    {
+        "subject": "Computer Networks",
+        "subtopic": "IP Forwarding (Longest Prefix Match)",
+        "question_type": "NAT",
+        "question": "Consider the entries shown below in the forwarding table of an IP router. Each entry consists of an IP prefix and the corresponding next hop router for packets whose destination IP address matches the prefix. The notation “/N” in a prefix indicates a subnet mask with the most significant N bits set to 1.\nPrefix | Next hop router\n10.1.1.0/24 | R1\n10.1.1.128/25 | R2\n10.1.1.64/26 | R3\n10.1.1.192/26 | R4\nThis router forwards 20 packets each to 5 hosts. The IP addresses of the hosts are 10.1.1.16, 10.1.1.72, 10.1.1.132, 10.1.1.191, and 10.1.1.205 . The number of packets forwarded via the next hop router R2 is _______",
+        "options": null,
+        "answer": 40.0
+    },
+    {
+        "subject": "Theory of Computation",
+        "subtopic": "Chomsky Normal Form",
+        "question_type": "NAT",
+        "question": "Let G = (V, Σ, S, P) be a context-free grammar in Chomsky Normal Form with Σ = {a, b, c} and V containing 10 variable symbols including the start symbol S. The string w = a^30 b^30 c^30 is derivable from S. The number of steps (application of rules) in the derivation S →* w is _________",
+        "options": null,
+        "answer": 179.0
+    },
+    {
+        "subject": "Algorithms",
+        "subtopic": "Graph Traversal (DFS)",
+        "question_type": "NAT",
+        "question": "The number of edges present in the forest generated by the DFS traversal of an undirected graph G with 100 vertices is 40. The number of connected components in G is _________",
+        "options": null,
+        "answer": 60.0
+    },
+    {
+        "subject": "Operating System",
+        "subtopic": "Paging and Address Translation",
+        "question_type": "NAT",
+        "question": "Consider a memory management system that uses a page size of 2 KB. Assume that both the physical and virtual addresses start from 0. Assume that the pages 0, 1, 2, and 3 are stored in the page frames 1, 3, 2, and 0, respectively. The physical address (in decimal format) corresponding to the virtual address 2500 (in decimal format) is _________",
+        "options": null,
+        "answer": 6596.0
+    },
+    {
+        "subject": "Computer Networks",
+        "subtopic": "Ethernet / CSMA-CD",
+        "question_type": "NAT",
+        "question": "Consider an Ethernet segment with a transmission speed of 10^8 bits/sec and a maximum segment length of 500 meters. If the speed of propagation of the signal in the medium is 2×10^8 meters/sec, then the minimum frame size (in bits) required for collision detection is _________",
+        "options": null,
+        "answer": 500.0
+    },
+    {
+        "subject": "Databases",
+        "subtopic": "Functional Dependencies",
+        "question_type": "NAT",
+        "question": "A functional dependency F: X → Y is termed as a useful functional dependency if and only if it satisfies all the following three conditions:\n• X is not the empty set.\n• Y is not the empty set.\n• Intersection of X and Y is the empty set.\nFor a relation R with 4 attributes, the total number of possible useful functional dependencies is ________",
+        "options": null,
+        "answer": 50.0
+    },
+    {
+        "subject": "Theory of Computation",
+        "subtopic": "Regular Expressions",
+        "question_type": "NAT",
+        "question": "Let L1 be the language represented by the regular expression b*ab*(ab*ab*)* and L2 = { w ∈ (a + b)* | |w| ≤ 4}, where |w| denotes the length of string w. The number of strings in L2 which are also in L1 is ___________",
+        "options": null,
+        "answer": 15.0
+    }
+]

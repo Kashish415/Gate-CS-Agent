@@ -51,7 +51,7 @@ Conditional edges handle three routing decisions:
 |-----------|---------|
 | LLM provider | [Groq](https://groq.com) via `langchain-groq` |
 | Pipeline orchestration | [LangGraph](https://langchain-ai.github.io/langgraph/) |
-| Structured output | [Pydantic](https://docs.pydantic.dev/) v2 with `json_mode` |
+| Structured output | [Pydantic](https://docs.pydantic.dev/) v2 with `json_schema` |
 | Observability | [LangSmith](https://smith.langchain.com/) tracing + SQLite logging |
 | Publishing | [python-telegram-bot](https://python-telegram-bot.org/) |
 | Package management | [uv](https://docs.astral.sh/uv/) |
@@ -62,7 +62,7 @@ Conditional edges handle three routing decisions:
 
 - **Strategy pattern** via registry dicts for validators, comparators, LLM schemas, and publishers. No `if/elif` dispatch on question type in core logic.
 - **Dependency injection** via LangGraph's `RunnableConfig`. All external dependencies (LLM, Telegram, database, cache) are passed at invoke time through `config["configurable"]`. The composition root is `main.py`.
-- **Defensive LLM parsing.** `VerifierPayload` defaults confidence to 1 (lowest) and reasoning to empty string. The `ambiguous` field accepts both `"ambiguous"` and `"ambiguity"` keys via `AliasChoices` to handle model output variance.
+- **Defensive LLM parsing.** `VerifierPayload` defaults confidence to 1 (lowest) and reasoning to empty string, preventing parse failures when the model omits optional fields.
 
 ## Question Types
 

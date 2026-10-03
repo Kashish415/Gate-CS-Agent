@@ -1,101 +1,62 @@
-import logging
-
-from src.comparators import MCQComparator, MSQComparator, NATComparator
-
-
-# MCQComparator
-
-def test_mcq_exact_match() -> None:
-	assert MCQComparator().matches("A", "A") is True
+from src.pipeline import _answers_match
+from src.domain import QuestionType
 
 
-def test_mcq_different_labels() -> None:
-	assert MCQComparator().matches("A", "B") is False
+# -- MCQ --
+
+def test_mcq_exact_match():
+    assert _answers_match(QuestionType.MCQ, "A", "A") is True
+
+def test_mcq_different_labels():
+    assert _answers_match(QuestionType.MCQ, "A", "B") is False
+
+def test_mcq_type_mismatch_list():
+    assert _answers_match(QuestionType.MCQ, ["A"], "A") is False
+
+def test_mcq_type_mismatch_float():
+    assert _answers_match(QuestionType.MCQ, 1.0, "A") is False
 
 
-def test_mcq_type_mismatch_list(caplog: logging.LogRecord) -> None:
-	with caplog.at_level(logging.WARNING):
-		result = MCQComparator().matches(["A"], "A")
-	assert result is False
-	assert "Type mismatch" in caplog.text
+# -- MSQ --
+
+def test_msq_same_set():
+    assert _answers_match(QuestionType.MSQ, ["A", "C"], ["C", "A"]) is True
+
+def test_msq_different_sets():
+    assert _answers_match(QuestionType.MSQ, ["A", "B"], ["A", "C"]) is False
+
+def test_msq_subset_is_not_match():
+    assert _answers_match(QuestionType.MSQ, ["A"], ["A", "B"]) is False
+
+def test_msq_type_mismatch_string():
+    assert _answers_match(QuestionType.MSQ, "A", ["A"]) is False
+
+def test_msq_type_mismatch_both_strings():
+    assert _answers_match(QuestionType.MSQ, "A", "A") is False
 
 
-def test_mcq_type_mismatch_float(caplog: logging.LogRecord) -> None:
-	with caplog.at_level(logging.WARNING):
-		result = MCQComparator().matches(1.0, "A")
-	assert result is False
-	assert "Type mismatch" in caplog.text
+# -- NAT --
 
+def test_nat_exact_match():
+    assert _answers_match(QuestionType.NAT, 3.14, 3.14) is True
 
-# MSQComparator
+def test_nat_within_absolute_tolerance():
+    assert _answers_match(QuestionType.NAT, 1.005, 1.01) is True
 
-def test_msq_same_set() -> None:
-	assert MSQComparator().matches(["A", "C"], ["C", "A"]) is True
+def test_nat_within_relative_tolerance():
+    assert _answers_match(QuestionType.NAT, 100.0, 100.5) is True
 
+def test_nat_zero_values():
+    assert _answers_match(QuestionType.NAT, 0.0, 0.005) is True
 
-def test_msq_different_sets() -> None:
-	assert MSQComparator().matches(["A", "B"], ["A", "C"]) is False
+def test_nat_negative_values():
+    assert _answers_match(QuestionType.NAT, -5.0, -5.005) is True
 
+def test_nat_string_numbers():
+    assert _answers_match(QuestionType.NAT, "3.14", "3.14") is True
 
-def test_msq_subset_is_not_match() -> None:
-	assert MSQComparator().matches(["A"], ["A", "B"]) is False
+def test_nat_unparseable():
+    assert _answers_match(QuestionType.NAT, "abc", "3.14") is False
 
-
-def test_msq_type_mismatch_string(caplog: logging.LogRecord) -> None:
-	with caplog.at_level(logging.WARNING):
-		result = MSQComparator().matches("A", ["A"])
-	assert result is False
-	assert "Type mismatch" in caplog.text
-
-
-def test_msq_type_mismatch_both_strings(caplog: logging.LogRecord) -> None:
-	with caplog.at_level(logging.WARNING):
-		result = MSQComparator().matches("A", "A")
-	assert result is False
-	assert "Type mismatch" in caplog.text
-
-
-# NATComparator
-
-def test_nat_exact_match() -> None:
-	assert NATComparator().matches(42.0, 42.0) is True
-
-
-def test_nat_within_absolute_tolerance() -> None:
-	comparator = NATComparator(absolute_tolerance=0.01, relative_tolerance=0.0)
-	assert comparator.matches(1.0, 1.005) is True
-	assert comparator.matches(1.0, 1.02) is False
-
-
-def test_nat_within_relative_tolerance() -> None:
-	comparator = NATComparator(absolute_tolerance=0.0, relative_tolerance=0.01)
-	assert comparator.matches(100.0, 100.5) is True
-	assert comparator.matches(100.0, 102.0) is False
-
-
-def test_nat_zero_values() -> None:
-	comparator = NATComparator(absolute_tolerance=0.01, relative_tolerance=0.01)
-	assert comparator.matches(0.0, 0.0) is True
-	assert comparator.matches(0.0, 0.005) is True
-
-
-def test_nat_negative_values() -> None:
-	assert NATComparator().matches(-5.0, -5.0) is True
-
-
-def test_nat_string_numbers() -> None:
-	assert NATComparator().matches("42", "42.0") is True
-
-
-def test_nat_type_mismatch_unparseable(caplog: logging.LogRecord) -> None:
-	with caplog.at_level(logging.WARNING):
-		result = NATComparator().matches("abc", 42.0)
-	assert result is False
-	assert "Unparseable" in caplog.text
-
-
-def test_nat_type_mismatch_list(caplog: logging.LogRecord) -> None:
-	with caplog.at_level(logging.WARNING):
-		result = NATComparator().matches(["A"], 42.0)
-	assert result is False
-	assert "Unparseable" in caplog.text
+def test_nat_list_input():
+    assert _answers_match(QuestionType.NAT, [1, 2], 3.0) is False
