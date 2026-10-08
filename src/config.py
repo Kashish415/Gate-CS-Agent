@@ -1,9 +1,7 @@
 import random
 from datetime import date
 from pathlib import Path
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 from .domain import Difficulty, QuestionType, SlotSpec
 
 SLOT_TEMPLATE: tuple[tuple[QuestionType, int, Difficulty], ...] = (
@@ -19,7 +17,7 @@ DB_PATH = Path("observability/daily_log.db")
 
 
 class Settings(BaseSettings):
-	model_config = SettingsConfigDict(env_file=".env")
+	model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 	groq_api_key: str
 	telegram_bot_token: str
 	telegram_channel_id: str

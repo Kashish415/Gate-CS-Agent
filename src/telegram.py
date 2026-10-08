@@ -15,6 +15,14 @@ def _escape_v2(text):
     return "||".join(escape_markdown(p, version=2) for p in parts)
 
 
+def _truncate_explanation(text: str | None, max_len: int = 200) -> str | None:
+    if not text:
+        return None
+    if len(text) <= max_len:
+        return text
+    return text[: max_len - 3] + "..."
+
+
 class TelegramBot:
     def __init__(self, token, retries=3):
         self._token = token
@@ -37,7 +45,7 @@ class TelegramBot:
         return await self._send(lambda bot: bot.send_poll(
             chat_id=chat_id, question=question, options=list(options),
             type=poll_type, correct_option_id=correct_id,
-            explanation=explanation[:200] if explanation else None,
+            explanation=_truncate_explanation(explanation),
             is_anonymous=True, allows_multiple_answers=multiple,
         ))
 
@@ -53,7 +61,7 @@ class TelegramBot:
             correct_id = ord(question.answer.upper()) - ord("A")
             return await self.send_poll(
                 chat_id, question.question, question.options,
-                correct_id, question.explanation[:200],
+                correct_id, question.explanation,
             )
 
         if qtype == QuestionType.MSQ:

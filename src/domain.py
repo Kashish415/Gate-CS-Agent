@@ -3,7 +3,6 @@ from enum import StrEnum
 from typing import Literal
 from pydantic import BaseModel, Field
 
-
 class QuestionType(StrEnum):
 	MCQ = "MCQ"
 	MSQ = "MSQ"
@@ -55,7 +54,10 @@ class NATPayload(QuestionPayload):
 class VerifierPayload(BaseModel):
 	reasoning: str = Field(default="", description="Brief step-by-step reasoning")
 	confidence: int = Field(default=1, ge=1, le=5, description="Confidence score from 1 to 5")
-	ambiguous: bool = Field(default=False, description="True if question is ambiguous or flawed")
+	ambiguous: bool = Field(
+		default=False,
+		description="True if question is ambiguous or flawed",
+	)
 
 class MCQVerifierPayload(VerifierPayload):
 	answer: OptionLabel = Field(description="Option letter string: A, B, C, or D")
@@ -96,7 +98,7 @@ class DailyLogRow(BaseModel):
 	confidence: int | None = None
 	retry_count: int
 	latency_ms: int
-	published: bool = False
+	published: bool
 	failure_reason: FailureReason | None = None
 
 class VerifiedQuestion(GeneratedQuestion):

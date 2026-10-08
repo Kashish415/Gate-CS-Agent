@@ -22,6 +22,8 @@ jobs:
           aws s3 cp s3://${{ secrets.R2_BUCKET }}/verified_cache.json data/verified_cache.json \
             --endpoint-url ${{ secrets.R2_ENDPOINT_URL }} || true
       - run: pip install uv && uv sync
+      - name: Run tests
+        run: uv run pytest tests/ -v
       - run: uv run gate-cs-agent
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
