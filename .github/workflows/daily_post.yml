@@ -11,25 +11,21 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - name: Restore state from R2
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-          R2_ENDPOINT_URL: ${{ secrets.R2_ENDPOINT_URL }}
-        run: |
-          mkdir -p observability data
-          if [ -z "$R2_BUCKET" ]; then
-            echo "R2_BUCKET not set, skipping restore"
-            exit 0
-          fi
-          aws s3 cp "s3://$R2_BUCKET/daily_log.db" observability/daily_log.db \
-            --endpoint-url "$R2_ENDPOINT_URL" || true
-          aws s3 cp "s3://$R2_BUCKET/verified_cache.json" data/verified_cache.json \
-            --endpoint-url "$R2_ENDPOINT_URL" || true
+
+      - name: Restore pipeline state
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            observability/daily_log.db
+            data/verified_cache.json
+          key: pipeline-state-${{ github.run_id }}
+          restore-keys: pipeline-state-
+
       - run: pip install uv && uv sync
+
       - name: Run tests
         run: uv run pytest tests/ -v
+
       - run: uv run gate-cs-agent
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
@@ -39,23 +35,12 @@ jobs:
           LANGSMITH_TRACING: true
           LANGSMITH_PROJECT: gate-cs-agent
           LANGSMITH_ENDPOINT: ${{ secrets.LANGSMITH_ENDPOINT }}
-      - name: Persist state to R2
+
+      - name: Save pipeline state
         if: always()
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-          R2_ENDPOINT_URL: ${{ secrets.R2_ENDPOINT_URL }}
-        run: |
-          if [ -z "$R2_BUCKET" ]; then
-            echo "R2_BUCKET not set, skipping persist"
-            exit 0
-          fi
-          if [ -f observability/daily_log.db ]; then
-            aws s3 cp observability/daily_log.db "s3://$R2_BUCKET/daily_log.db" \
-              --endpoint-url "$R2_ENDPOINT_URL"
-          fi
-          if [ -f data/verified_cache.json ]; then
-            aws s3 cp data/verified_cache.json "s3://$R2_BUCKET/verified_cache.json" \
-              --endpoint-url "$R2_ENDPOINT_URL"
-          fi
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            observability/daily_log.db
+            data/verified_cache.json
+          key: pipeline-state-${{ github.run_id }}

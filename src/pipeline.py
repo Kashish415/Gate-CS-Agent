@@ -50,7 +50,7 @@ def _build_ver_chain(model, slot, question, options):
         subject=slot.subject, subtopic=slot.subtopic, qtype=slot.question_type.value,
         marks=slot.marks, type_rules=TYPE_RULES[slot.question_type],
         question=question, options=formatted,
-    ) | model.with_structured_output(VerifierPayload, method="json_schema")
+    ) | model.with_structured_output(VerifierPayload, method="json_mode")
 
 
 def validate(question):

@@ -65,17 +65,19 @@ def _load_test_cases():
     test_cases = []
     for q in questions:
         slot = q["slot"]
-        output = {
+        question_output = {
             "question": q["question"],
             "options": q.get("options"),
             "answer": q["answer"],
             "explanation": q["explanation"],
-            "verifier_answer": q["verifier"]["answer"],
-            "verifier_confidence": q["verifier"]["confidence"],
         }
+        context = (
+            f"Generate {slot['question_type']} about {slot['subject']} / {slot['subtopic']}. "
+            f"Verifier answer: {q['verifier']['answer']}, confidence: {q['verifier']['confidence']}"
+        )
         test_cases.append(LLMTestCase(
-            input=f"Generate {slot['question_type']} about {slot['subject']} / {slot['subtopic']}",
-            actual_output=json.dumps(output, indent=2),
+            input=context,
+            actual_output=json.dumps(question_output, indent=2),
         ))
     return test_cases
 
