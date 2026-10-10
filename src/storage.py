@@ -1,7 +1,6 @@
 import json
 import logging
 import sqlite3
-from contextlib import contextmanager
 from datetime import date, timedelta
 
 from .domain import VerifiedQuestion
@@ -31,65 +30,62 @@ CREATE TABLE IF NOT EXISTS daily_log (
 """
 
 
-@contextmanager
-def _connect(db_path):
-    db_path.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(db_path)
-    try:
-        with conn:
-            yield conn
-    finally:
-        conn.close()
-
-
 class Database:
     def __init__(self, db_path):
         self._path = db_path
-        with _connect(self._path) as conn:
-            conn.execute(_CREATE_TABLE)
+        db_path.parent.mkdir(parents=True, exist_ok=True)
+        conn = sqlite3.connect(db_path)
+        conn.execute(_CREATE_TABLE)
+        conn.commit()
+        conn.close()
 
-    def log_slot(self, row):
-        with _connect(self._path) as conn:
-            conn.execute(
-                """INSERT OR IGNORE INTO daily_log
-                (date, slot_index, subject, subtopic, type, marks, difficulty, question_text,
-                generator_answer, verifier_answer, agreement, confidence,
-                retry_count, latency_ms, published, failure_reason)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                (
-                    row.date.isoformat(), row.slot_index, row.subject, row.subtopic,
-                    row.question_type.value, row.marks,
-                    row.difficulty.value if row.difficulty else None,
-                    row.question_text,
-                    json.dumps(row.generator_answer), json.dumps(row.verifier_answer),
-                    int(row.agreement), row.confidence, row.retry_count, row.latency_ms,
-                    int(row.published),
-                    row.failure_reason.value if row.failure_reason else None,
-                ),
-            )
+    def log_slot(self, slot, state, gen=None, ver=None, published=False, failure=None, latency=0):
+        conn = sqlite3.connect(self._path)
+        conn.execute(
+            """INSERT OR IGNORE INTO daily_log
+            (date, slot_index, subject, subtopic, type, marks, difficulty, question_text,
+            generator_answer, verifier_answer, agreement, confidence,
+            retry_count, latency_ms, published, failure_reason)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (
+                date.today().isoformat(), slot.slot_index, slot.subject, slot.subtopic,
+                slot.question_type.value, slot.marks, slot.difficulty.value,
+                gen.question if gen else None,
+                json.dumps(gen.answer) if gen else None,
+                json.dumps(ver.answer) if ver else None,
+                int(published), ver.confidence if ver else None,
+                state["retries"].get(slot.slot_index, 0), latency,
+                int(published), failure,
+            ),
+        )
+        conn.commit()
+        conn.close()
 
     def published_question_texts(self):
-        with _connect(self._path) as conn:
-            rows = conn.execute(
-                "SELECT question_text FROM daily_log WHERE published = 1 AND question_text IS NOT NULL"
-            ).fetchall()
+        conn = sqlite3.connect(self._path)
+        rows = conn.execute(
+            "SELECT question_text FROM daily_log WHERE published = 1 AND question_text IS NOT NULL"
+        ).fetchall()
+        conn.close()
         return {text for (text,) in rows}
 
     def today_already_posted(self, day, expected_slot_count):
-        with _connect(self._path) as conn:
-            row = conn.execute(
-                "SELECT COUNT(*) FROM daily_log WHERE date = ?", (day.isoformat(),)
-            ).fetchone()
+        conn = sqlite3.connect(self._path)
+        row = conn.execute(
+            "SELECT COUNT(*) FROM daily_log WHERE date = ?", (day.isoformat(),)
+        ).fetchone()
+        conn.close()
         return row is not None and row[0] == expected_slot_count
 
     def recent_subtopic_usage(self, days=7, today=None):
         end = today or date.today()
         start = end - timedelta(days=days - 1)
-        with _connect(self._path) as conn:
-            rows = conn.execute(
-                "SELECT subject, subtopic FROM daily_log WHERE date BETWEEN ? AND ?",
-                (start.isoformat(), end.isoformat()),
-            ).fetchall()
+        conn = sqlite3.connect(self._path)
+        rows = conn.execute(
+            "SELECT subject, subtopic FROM daily_log WHERE date BETWEEN ? AND ?",
+            (start.isoformat(), end.isoformat()),
+        ).fetchall()
+        conn.close()
         return {(subject, subtopic) for subject, subtopic in rows}
 
 

@@ -11,8 +11,7 @@ dependencies = [
     "langgraph>=1.2.11",
     "langsmith>=0.12.1",
     "pydantic>=2.13.5",
-    "pydantic-settings>=2.0",
-    "portalocker[win32]>=2.8.0",
+    "python-dotenv>=1.0",
     "python-telegram-bot>=22.8",
 ]
 

@@ -15,12 +15,18 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ENDPOINT_URL: ${{ secrets.R2_ENDPOINT_URL }}
         run: |
           mkdir -p observability data
-          aws s3 cp s3://${{ secrets.R2_BUCKET }}/daily_log.db observability/daily_log.db \
-            --endpoint-url ${{ secrets.R2_ENDPOINT_URL }} || true
-          aws s3 cp s3://${{ secrets.R2_BUCKET }}/verified_cache.json data/verified_cache.json \
-            --endpoint-url ${{ secrets.R2_ENDPOINT_URL }} || true
+          if [ -z "$R2_BUCKET" ]; then
+            echo "R2_BUCKET not set, skipping restore"
+            exit 0
+          fi
+          aws s3 cp "s3://$R2_BUCKET/daily_log.db" observability/daily_log.db \
+            --endpoint-url "$R2_ENDPOINT_URL" || true
+          aws s3 cp "s3://$R2_BUCKET/verified_cache.json" data/verified_cache.json \
+            --endpoint-url "$R2_ENDPOINT_URL" || true
       - run: pip install uv && uv sync
       - name: Run tests
         run: uv run pytest tests/ -v
@@ -38,8 +44,18 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ENDPOINT_URL: ${{ secrets.R2_ENDPOINT_URL }}
         run: |
-          aws s3 cp observability/daily_log.db s3://${{ secrets.R2_BUCKET }}/daily_log.db \
-            --endpoint-url ${{ secrets.R2_ENDPOINT_URL }}
-          aws s3 cp data/verified_cache.json s3://${{ secrets.R2_BUCKET }}/verified_cache.json \
-            --endpoint-url ${{ secrets.R2_ENDPOINT_URL }}
+          if [ -z "$R2_BUCKET" ]; then
+            echo "R2_BUCKET not set, skipping persist"
+            exit 0
+          fi
+          if [ -f observability/daily_log.db ]; then
+            aws s3 cp observability/daily_log.db "s3://$R2_BUCKET/daily_log.db" \
+              --endpoint-url "$R2_ENDPOINT_URL"
+          fi
+          if [ -f data/verified_cache.json ]; then
+            aws s3 cp data/verified_cache.json "s3://$R2_BUCKET/verified_cache.json" \
+              --endpoint-url "$R2_ENDPOINT_URL"
+          fi

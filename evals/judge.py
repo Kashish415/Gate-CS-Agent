@@ -1,22 +1,20 @@
 import os
-from deepeval.models import DeepEvalBaseLLM
 from dotenv import load_dotenv
+from deepeval.models import DeepEvalBaseLLM
 from groq import Groq
-
-load_dotenv()
 
 
 class GroqJudge(DeepEvalBaseLLM):
     def __init__(self, model="openai/gpt-oss-120b"):
+        load_dotenv()
         self._model = model
-        api_key = os.getenv("GROQ_API_KEY")
-        self._client = Groq(api_key=api_key) if api_key else Groq()
+        self._client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
     def get_model_name(self):
         return self._model
 
     def load_model(self):
-        return self._model
+        return self._client
 
     def generate(self, prompt, schema=None):
         response = self._client.chat.completions.create(

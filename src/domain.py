@@ -3,105 +3,49 @@ from enum import StrEnum
 from typing import Literal
 from pydantic import BaseModel, Field
 
+
 class QuestionType(StrEnum):
-	MCQ = "MCQ"
-	MSQ = "MSQ"
-	NAT = "NAT"
+    MCQ = "MCQ"
+    MSQ = "MSQ"
+    NAT = "NAT"
+
 
 class Difficulty(StrEnum):
-	EASY = "EASY"
-	MEDIUM = "MEDIUM"
-	HARD = "HARD"
+    EASY = "EASY"
+    MEDIUM = "MEDIUM"
+    HARD = "HARD"
 
-class FailureReason(StrEnum):
-	SCHEMA_INVALID = "schema_invalid"
-	OPTION_COUNT = "option_count"
-	DUPLICATE_OPTION = "duplicate_option"
-	UNPARSEABLE_NAT = "unparseable_nat"
-	ANSWER_LEAK = "answer_leak"
-	VERIFIER_DISAGREES = "verifier_disagrees"
-	FLAGGED_AMBIGUOUS = "flagged_ambiguous"
-	LOW_CONFIDENCE = "low_confidence"
-	RETRY_EXHAUSTED = "retry_exhausted"
-	PUBLISH_FAILED = "publish_failed"
-
-OptionLabel = Literal["A", "B", "C", "D"]
 
 class SlotSpec(BaseModel):
-	slot_index: int
-	subject: str
-	subtopic: str
-	question_type: QuestionType
-	marks: Literal[1, 2]
-	difficulty: Difficulty = Difficulty.MEDIUM
+    slot_index: int
+    subject: str
+    subtopic: str
+    question_type: QuestionType
+    marks: Literal[1, 2]
+    difficulty: Difficulty = Difficulty.MEDIUM
+
 
 class QuestionPayload(BaseModel):
-	question: str = Field(description="The question prompt text")
-	explanation: str = Field(description="Brief explanation of why the answer is correct")
+    question: str = Field(description="The question prompt text")
+    options: list[str] | None = Field(default=None, description="List of 4 options for MCQ/MSQ, None for NAT")
+    answer: str | list[str] | float = Field(description="Answer: letter for MCQ, list of letters for MSQ, number for NAT")
+    explanation: str = Field(description="Brief explanation of why the answer is correct")
+    slot: SlotSpec | None = Field(default=None, exclude=True)
 
-class MCQPayload(QuestionPayload):
-	options: list[str] = Field(description="List of exactly 4 option text strings corresponding to A, B, C, D")
-	answer: OptionLabel = Field(description="Option letter string: A, B, C, or D")
-
-class MSQPayload(QuestionPayload):
-	options: list[str] = Field(description="List of exactly 4 option text strings corresponding to A, B, C, D")
-	answer: list[OptionLabel] = Field(description="List of correct option letters e.g. ['A', 'C']")
-
-class NATPayload(QuestionPayload):
-	options: None = None
-	answer: float = Field(description="Numeric answer value")
 
 class VerifierPayload(BaseModel):
-	reasoning: str = Field(default="", description="Brief step-by-step reasoning")
-	confidence: int = Field(default=1, ge=1, le=5, description="Confidence score from 1 to 5")
-	ambiguous: bool = Field(
-		default=False,
-		description="True if question is ambiguous or flawed",
-	)
+    answer: str | list[str] | float = Field(description="Independent answer")
+    reasoning: str = Field(default="", description="Brief step-by-step reasoning")
+    confidence: int = Field(default=1, ge=1, le=5, description="Confidence 1-5")
+    ambiguous: bool = Field(default=False, description="True if question is ambiguous or flawed")
 
-class MCQVerifierPayload(VerifierPayload):
-	answer: OptionLabel = Field(description="Option letter string: A, B, C, or D")
 
-class MSQVerifierPayload(VerifierPayload):
-	answer: list[OptionLabel] = Field(description="List of correct option letters e.g. ['A', 'C']")
-
-class NATVerifierPayload(VerifierPayload):
-	answer: float = Field(description="Numeric answer value")
-
-class GeneratedQuestion(QuestionPayload):
-	slot: SlotSpec
-	options: list[str] | None = None
-	answer: str | list[str] | float
-
-class VerifierResult(BaseModel):
-	answer: str | list[str] | float
-	reasoning: str
-	confidence: int = Field(ge=1, le=5)
-	ambiguous: bool
-
-class ValidationOutcome(BaseModel):
-	passed: bool
-	reason: FailureReason | None = None
-
-class DailyLogRow(BaseModel):
-	date: date
-	slot_index: int
-	subject: str
-	subtopic: str
-	question_type: QuestionType
-	marks: Literal[1, 2]
-	difficulty: Difficulty = Difficulty.MEDIUM
-	question_text: str | None = None
-	generator_answer: str | list[str] | float | None = None
-	verifier_answer: str | list[str] | float | None = None
-	agreement: bool = False
-	confidence: int | None = None
-	retry_count: int
-	latency_ms: int
-	published: bool
-	failure_reason: FailureReason | None = None
-
-class VerifiedQuestion(GeneratedQuestion):
-	verifier: VerifierResult
-	published: bool
-	cached_on: date
+class VerifiedQuestion(BaseModel):
+    slot: SlotSpec
+    question: str
+    options: list[str] | None = None
+    answer: str | list[str] | float
+    explanation: str
+    verifier: VerifierPayload
+    published: bool = False
+    cached_on: date = Field(default_factory=date.today)
