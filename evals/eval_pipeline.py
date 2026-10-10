@@ -95,7 +95,7 @@ def main():
         print(f"\n--- Batch {i // batch_size + 1} ({len(batch)} cases) ---")
         evaluate(batch, metrics, cache_config=cache_cfg)
         if i + batch_size < len(test_cases):
-            time.sleep(5)
+            time.sleep(10)
 
 
 if __name__ == "__main__":

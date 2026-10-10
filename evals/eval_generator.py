@@ -75,7 +75,7 @@ async def _generate_test_cases():
             ))
         except Exception as err:
             print(f"[Slot {i}] Generation failed: {err}")
-        time.sleep(2)
+        time.sleep(5)
 
     return test_cases
 
@@ -95,7 +95,7 @@ def main():
         print(f"\n--- Batch {i // batch_size + 1} ({len(batch)} cases) ---")
         evaluate(batch, metrics, cache_config=cache_cfg)
         if i + batch_size < len(test_cases):
-            time.sleep(5)
+            time.sleep(10)
 
 
 if __name__ == "__main__":
