@@ -19,10 +19,8 @@ All attempts are logged to SQLite for observability and traced via LangSmith.
 
 ### Pipeline Graph (LangGraph StateGraph)
 
-```
-<img width="166" height="729" alt="image" src="https://github.com/user-attachments/assets/ffce6ee6-7dab-4bb9-b69b-9fd948cae673" />
+<img width="166" height="729" alt="image" src="https://github.com/user-attachments/assets/0756b4cb-472d-4ce0-94bc-517be62c8c1b" />
 
-```
 
 ## Project Structure
 
