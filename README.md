@@ -15,7 +15,9 @@ A single LLM generating exam questions often produces wrong answers or flawed lo
 5. **Resolution**: If answers match and confidence is high enough, the question is accepted. Otherwise it retries (up to 2 times) or falls back to a previously verified cached question.
 6. **Publishing**: Accepted questions go to Telegram — native quiz poll for MCQ, regular poll + spoiler answer for MSQ, text message + spoiler for NAT.
 
-All attempts are logged to SQLite for observability.
+All attempts are logged to SQLite for observability and traced via LangSmith.
+
+### Pipeline Graph (LangGraph StateGraph)
 
 ```
 START --> generate --> validate --+--> verify --> resolve --+--> publish --> END
@@ -95,33 +97,42 @@ uv run python -m evals.eval_application
 
 ## Eval Results
 
-Evals run at three levels:
+Evals run at three levels using DeepEval with GEval metrics:
 
-| Level | Script | Metrics | Latest |
-|-------|--------|---------|--------|
+| Level | Script | Metrics | Results (n=10-22) |
+|-------|--------|---------|-------------------|
 | Component | eval_generator | Topic Adherence, Answer Correctness | 100%, 90% |
 | Component | eval_verifier | Verifier Accuracy, Confidence Calibration | 100%, 100% |
-| Pipeline | eval_pipeline | Spec Faithfulness, Agreement Quality, Question Quality | 100%, 55%, 90% |
+| Pipeline | eval_pipeline | Spec Faithfulness, Agreement Quality, Question Quality | 100%, 100%, 90% |
 | Application | eval_application | Toxicity, Bias | Pass, Pass |
 
-Agreement Quality scores low because the GEval judge sometimes outputs miscalibrated scores even when its own reasoning confirms correctness. This is a known GEval issue with binary evaluation rubrics.
+Question Quality occasionally flags technically incorrect answers in cached questions — this is the eval catching real errors that slipped through the dual-LLM verification, confirming both the eval and the limitation of LLM-based verification.
+
+## Observability
+
+Pipeline runs are traced via LangSmith with alerts configured for:
+- Pipeline errors (run failures)
+- High latency (runs exceeding 60s)
+
+LangSmith dashboard tracks trace count, latency percentiles, error rate, and token usage over time.
 
 ## Known Limitations
 
-- **Same model family**: Both generator and verifier are from the Groq model family. Agreement is not proof of correctness — it filters obvious errors but can miss shared blind spots.
-- **Eval judge circularity**: The GEval judge uses the same model as the generator. Eval scores measure self-consistency, not ground truth accuracy.
-- **Small sample sizes**: Evals run on 10 golden questions (component) and ~20 cached questions (pipeline). Larger datasets would give more reliable metrics.
-- **No human-in-the-loop**: Published questions are not reviewed by a human before posting. The pipeline relies entirely on automated verification.
+- **Same model family**: Both generator and verifier use Groq models. Agreement filters obvious errors but can miss shared blind spots.
+- **Eval judge circularity**: The GEval judge uses the same model as the generator. Scores measure self-consistency, not ground truth accuracy.
+- **Small sample sizes**: Evals run on 10 golden questions (component) and ~22 cached questions (pipeline). Larger datasets would give more reliable metrics.
+- **No human-in-the-loop**: Published questions go directly to Telegram without human review.
+- **Rate limits**: Groq free tier has 200k tokens/day. Running all 4 evals + the pipeline in the same day can exhaust the quota.
 
 ## CI/CD
 
-GitHub Actions runs daily at 03:00 UTC (`.github/workflows/daily_post.yml`):
-1. Restores SQLite DB and verified cache from Cloudflare R2
+GitHub Actions runs daily at 03:00 IST (`.github/workflows/daily_post.yml`):
+1. Restores SQLite DB and verified cache from GitHub Actions cache
 2. Runs pytest
 3. Runs the pipeline to generate and publish questions
-4. Persists state back to R2
+4. Saves state back to cache
 
-R2 (S3-compatible storage) is used because GitHub Actions runners are ephemeral — without it, the database and cache would be lost after each run.
+Actions cache persists across runs via `restore-keys` prefix matching. Cache expires after 7 days of inactivity — acceptable for a daily cron.
 
 ## License
 
