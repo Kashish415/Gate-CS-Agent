@@ -8,24 +8,20 @@ Built with LangGraph, LangChain, Groq, Pydantic, DeepEval, SQLite, and GitHub Ac
 
 A single LLM generating exam questions often produces wrong answers or flawed logic. This pipeline uses two separate LLMs in a generate-then-verify loop:
 
-1. **Slot picking**: A daily cron picks 3 random subtopics from the GATE CS syllabus, seeded by date for reproducibility.
-2. **Generator** (`gpt-oss-120b` via Groq): Produces a candidate question (MCQ, MSQ, or NAT) using few-shot examples from past GATE papers.
+1. **Slot picking**: A daily cron job picks 3 random subtopics from the GATE CS syllabus.
+2. **Generator** (`gpt-oss-120b` model): Produces a candidate question (MCQ, MSQ and NAT) using few-shot examples from past GATE papers.
 3. **Validation**: Deterministic checks — option count, duplicate options, answer format, answer leak in question text.
-4. **Verifier** (`gpt-oss-20b` via Groq): Independently solves the question from scratch without seeing the generator's answer. Reports its own answer, confidence (1-5), and whether the question is ambiguous.
+4. **Verifier** (`gpt-oss-20b` model): Independently solves the question from scratch without seeing the generator's answer. Reports its own answer, confidence score, and whether the question is ambiguous.
 5. **Resolution**: If answers match and confidence is high enough, the question is accepted. Otherwise it retries (up to 2 times) or falls back to a previously verified cached question.
-6. **Publishing**: Accepted questions go to Telegram — native quiz poll for MCQ, regular poll + spoiler answer for MSQ, text message + spoiler for NAT.
+6. **Publishing**: Accepted questions gets published to a dedicated telegram channel.
 
 All attempts are logged to SQLite for observability and traced via LangSmith.
 
 ### Pipeline Graph (LangGraph StateGraph)
 
 ```
-START --> generate --> validate --+--> verify --> resolve --+--> publish --> END
-                                 |                         |
-                                 +--> resolve (skip) ------+
-                                                           |
-                                        retry: generate <--+
-                                        exhausted: fallback --> publish --> END
+<img width="166" height="729" alt="image" src="https://github.com/user-attachments/assets/ffce6ee6-7dab-4bb9-b69b-9fd948cae673" />
+
 ```
 
 ## Project Structure
@@ -57,47 +53,9 @@ data/
     golden.json           10 human-verified benchmark questions for eval
 ```
 
-## Setup
-
-Requires Python 3.13+ and [uv](https://docs.astral.sh/uv/).
-
-```bash
-git clone https://github.com/Kashish415/Gate-CS-Agent.git
-cd Gate-CS-Agent
-uv sync
-```
-
-Create a `.env` file:
-
-```
-GROQ_API_KEY=gsk_...
-TELEGRAM_BOT_TOKEN=1234567890:AAA...
-TELEGRAM_CHANNEL_ID=@your_channel
-LANGSMITH_API_KEY=lsv2_...
-LANGSMITH_TRACING=true
-LANGSMITH_ENDPOINT=https://api.smith.langchain.com
-LANGSMITH_PROJECT=gate-cs-agent
-```
-
-## Usage
-
-```bash
-# Run the daily pipeline
-uv run gate-cs-agent
-
-# Run unit tests (36 tests)
-uv run pytest tests/ -v
-
-# Run evals (requires GROQ_API_KEY)
-uv run python -m evals.eval_generator
-uv run python -m evals.eval_verifier
-uv run python -m evals.eval_pipeline
-uv run python -m evals.eval_application
-```
-
 ## Eval Results
 
-Evals run at three levels using DeepEval with GEval metrics:
+Evals run at three levels using DeepEval:
 
 | Level | Script | Metrics | Results (n=10-22) |
 |-------|--------|---------|-------------------|
@@ -105,8 +63,6 @@ Evals run at three levels using DeepEval with GEval metrics:
 | Component | eval_verifier | Verifier Accuracy, Confidence Calibration | 100%, 100% |
 | Pipeline | eval_pipeline | Spec Faithfulness, Agreement Quality, Question Quality | 100%, 100%, 90% |
 | Application | eval_application | Toxicity, Bias | Pass, Pass |
-
-Question Quality occasionally flags technically incorrect answers in cached questions — this is the eval catching real errors that slipped through the dual-LLM verification, confirming both the eval and the limitation of LLM-based verification.
 
 ## Observability
 
@@ -116,14 +72,6 @@ Pipeline runs are traced via LangSmith with alerts configured for:
 
 LangSmith dashboard tracks trace count, latency percentiles, error rate, and token usage over time.
 
-## Known Limitations
-
-- **Same model family**: Both generator and verifier use Groq models. Agreement filters obvious errors but can miss shared blind spots.
-- **Eval judge circularity**: The GEval judge uses the same model as the generator. Scores measure self-consistency, not ground truth accuracy.
-- **Small sample sizes**: Evals run on 10 golden questions (component) and ~22 cached questions (pipeline). Larger datasets would give more reliable metrics.
-- **No human-in-the-loop**: Published questions go directly to Telegram without human review.
-- **Rate limits**: Groq free tier has 200k tokens/day. Running all 4 evals + the pipeline in the same day can exhaust the quota.
-
 ## CI/CD
 
 GitHub Actions runs daily at 03:00 IST (`.github/workflows/daily_post.yml`):
@@ -131,8 +79,6 @@ GitHub Actions runs daily at 03:00 IST (`.github/workflows/daily_post.yml`):
 2. Runs pytest
 3. Runs the pipeline to generate and publish questions
 4. Saves state back to cache
-
-Actions cache persists across runs via `restore-keys` prefix matching. Cache expires after 7 days of inactivity — acceptable for a daily cron.
 
 ## License
 
